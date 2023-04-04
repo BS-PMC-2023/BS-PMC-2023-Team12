@@ -1,67 +1,64 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Form,
-  Button,
-  Row,
-  Col,
-  FormGroup,
-  FormLabel,
-  FormControl,
-} from 'react-bootstrap';
-import FormContainer from '../components/FormContainer';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import Input from '../components/FormElements/Input';
+import { useForm } from '../hooks/FormHook';
+import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../util/validators';
+import Card from '../components/Card';
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formState, inputHandler] = useForm(
+    {
+      email: {
+        value: '',
+        isValid: false,
+      },
+      password: {
+        value: '',
+        isValid: false,
+      },
+    },
+    false
+  );
 
-  const submitHandler = (e) => {
-    console.log('ok');
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    console.log(formState.inputs.email.value, formState.inputs.password.value);
   };
-
   return (
     <>
-      <FormContainer>
-        <hr></hr>
+      <h1> </h1>
+      <Card>
         <hr className="hr-line-right"></hr>
         <h1>התחברות</h1>
-        <hr></hr>
         <hr className="hr-line-left"></hr>
-        <div>
-          <h1> </h1>
-          <h1> </h1>
-        </div>
         <Form onSubmit={submitHandler}>
-          <FormGroup controlId="email">
-            <FormLabel style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <strong>:אימייל</strong>
-            </FormLabel>
-            <FormControl
-              style={{ direction: 'rtl' }}
-              type="email"
-              placeholder=""
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-          <h5> </h5>
-          <FormGroup controlId="password">
-            <FormLabel style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <strong>:סיסמא</strong>
-            </FormLabel>
-            <FormControl
-              style={{ direction: 'rtl' }}
-              type="password"
-              placeholder=""
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-          <div>
-            <h2> </h2>
-          </div>
+          <Input
+            element="input"
+            style={{ direction: 'rtl' }}
+            id="email"
+            type="email"
+            label="אימייל:"
+            validators={[VALIDATOR_EMAIL()]}
+            errorText="אנא הזן כתובת דוא''ל מכללה תקנית."
+            onInput={inputHandler}
+          />
+          <Input
+            element="input"
+            id="password"
+            type="password"
+            label="סיסמא:"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="אנא הכנס סיסמא."
+            onInput={inputHandler}
+          />
+          <h2> </h2>
           <div className="d-grid gap-3">
-            <Button type="submit" variant="primary">
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={!formState.isValid}
+            >
               התחבר
             </Button>
           </div>
@@ -71,12 +68,11 @@ const LoginScreen = () => {
           <Col className="text-center">
             <strong>עדיין לא רשום למערכת?</strong>{' '}
             <Link to={'/register'}>
-              {' '}
               <strong>הירשם </strong>
             </Link>
           </Col>
         </Row>
-      </FormContainer>
+      </Card>
     </>
   );
 };

@@ -1,84 +1,86 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import Input from '../components/FormElements/Input';
+import { useForm } from '../hooks/FormHook';
 import {
-  Form,
-  Button,
-  Row,
-  Col,
-  FormGroup,
-  FormLabel,
-  FormControl,
-} from 'react-bootstrap';
-import FormContainer from '../components/FormContainer';
+  VALIDATOR_EMAIL,
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_REQUIRE,
+} from '../util/validators';
+import Card from '../components/Card';
 
 const RegisterScreen = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [formState, inputHandler] = useForm(
+    {
+      email: {
+        value: '',
+        isValid: false,
+      },
+      password: {
+        value: '',
+        isValid: false,
+      },
+    },
+    false
+  );
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(name, email, password);
+    console.log(
+      formState.inputs.name.value,
+      formState.inputs.email.value,
+      formState.inputs.password.value
+    );
   };
 
   return (
     <>
-      <FormContainer>
+      <h1> </h1>
+      <Card>
         <hr className="hr-line-right"></hr>
         <h1>הרשמה</h1>
         <hr className="hr-line-left"></hr>
-        <div>
-          <h1> </h1>
-        </div>
+
         <Form onSubmit={submitHandler}>
-          <FormGroup controlId="pname">
-            <FormLabel style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <strong>:שם פרטי</strong>
-            </FormLabel>
-            <FormControl
-              style={{ direction: 'rtl' }}
-              type="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-
-          <h5> </h5>
-          <FormGroup controlId="email">
-            <FormLabel style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <strong>:אימייל מכללה</strong>
-            </FormLabel>
-            <FormControl
-              style={{ direction: 'rtl' }}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-
-          <h5> </h5>
-          <FormGroup controlId="password">
-            <FormLabel style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <strong>:סיסמא</strong>
-            </FormLabel>
-            <FormControl
-              style={{ direction: 'rtl' }}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            ></FormControl>
-          </FormGroup>
-          <div>
-            <h2> </h2>
-          </div>
+          <Input
+            id="name"
+            type="name"
+            label="שם מלא:"
+            validators={[VALIDATOR_REQUIRE()]}
+            errorText="נא להזין שם."
+            onInput={inputHandler}
+          />
+          <Input
+            element="input"
+            style={{ direction: 'rtl' }}
+            id="email"
+            type="email"
+            label="אימייל מכללה:"
+            validators={[VALIDATOR_EMAIL()]}
+            errorText="אנא הזן כתובת דוא'ל מכללה תקנית."
+            onInput={inputHandler}
+          />
+          <Input
+            element="input"
+            id="password"
+            type="password"
+            label="סיסמא:"
+            validators={[VALIDATOR_MINLENGTH(6)]}
+            errorText="נא להזין סיסמה חוקית, לפחות 6 תווים."
+            onInput={inputHandler}
+          />
+          <h2> </h2>
           <div className="d-grid gap-3">
-            <Button type="submit" variant="primary">
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={!formState.isValid}
+            >
               הירשם
             </Button>
           </div>
         </Form>
-
-        <h2> </h2>
         <Row className="py-3">
           <Col className="text-center">
             <strong>רשום למערכת?</strong>{' '}
@@ -87,7 +89,7 @@ const RegisterScreen = () => {
             </Link>
           </Col>
         </Row>
-      </FormContainer>
+      </Card>
     </>
   );
 };
