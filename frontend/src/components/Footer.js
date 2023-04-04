@@ -3,13 +3,16 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 const Footer = () => {
   return (
-    <Container>
-      <Row>
-        <Col className="text-center py-3">
-          Copyright &copy; {new Date().getFullYear()} SCEVC - WMS
-        </Col>
-      </Row>
-    </Container>
+    <footer className="footer">
+      <Container>
+        <Row>
+          <Col className="text-center py-1">
+            <h3>SCEVC - WMS</h3>
+            Copyright &copy; {new Date().getFullYear()}
+          </Col>
+        </Row>
+      </Container>
+    </footer>
   );
 };
 
