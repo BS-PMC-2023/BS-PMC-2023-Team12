@@ -15,7 +15,7 @@ h2 {
 }
 
 h3 {
-  padding: 1rem 0;
+  padding: 0.3rem 0;
 }
 
 .footer {
@@ -34,6 +34,10 @@ h3 {
   width: 50%;
 }
 
+.card:hover {
+  box-shadow: 0 1px 8px #2d332f;
+}
+
 strong {
   font-size: 1.4rem;
 }
@@ -42,11 +46,6 @@ td {
   text-align: center;
   vertical-align: middle;
 }
-
-/* hr {
-  border: 10px solid SeaGreen;
-  border-radius: 5px;
-} */
 
 .hr-line-right {
   height: 25px;
