@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import Input from '../components/FormElements/Input';
 import { useForm } from '../hooks/FormHook';
@@ -9,8 +9,16 @@ import {
   VALIDATOR_REQUIRE,
 } from '../util/validators';
 import Card from '../components/Card';
+import { AuthContext } from '../context/AuthContext';
+import { useHttpClient } from '../hooks/httpHook';
+import Loader from '../components/Loader';
 
 const RegisterScreen = () => {
+  const auth = useContext(AuthContext);
+  const { isLoading, sendRequest } = useHttpClient();
+
+  const navigate = useNavigate();
+
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -27,11 +35,24 @@ const RegisterScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(
-      formState.inputs.name.value,
-      formState.inputs.email.value,
-      formState.inputs.password.value
-    );
+
+    try {
+      await sendRequest(
+        'http://localhost:5000/api/users/register',
+        'POST',
+        JSON.stringify({
+          name: formState.inputs.name.value,
+          email: formState.inputs.email.value,
+          password: formState.inputs.password.value,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+
+      auth.login();
+      navigate('/');
+    } catch (err) {}
   };
 
   return (
@@ -41,7 +62,6 @@ const RegisterScreen = () => {
         <hr className="hr-line-right"></hr>
         <h1>הרשמה</h1>
         <hr className="hr-line-left"></hr>
-
         <Form onSubmit={submitHandler}>
           <Input
             id="name"
@@ -58,7 +78,7 @@ const RegisterScreen = () => {
             type="email"
             label="אימייל מכללה:"
             validators={[VALIDATOR_EMAIL()]}
-            errorText="אנא הזן כתובת דוא'ל מכללה תקנית."
+            errorText="אנא הזן כתובת דוא''ל מכללה תקנית."
             onInput={inputHandler}
           />
           <Input
@@ -77,7 +97,7 @@ const RegisterScreen = () => {
               variant="primary"
               disabled={!formState.isValid}
             >
-              הירשם
+              {isLoading ? <Loader variant="light" /> : <string>הירשם</string>}
             </Button>
           </div>
         </Form>
@@ -90,6 +110,7 @@ const RegisterScreen = () => {
           </Col>
         </Row>
       </Card>
+      <h1> </h1>
     </>
   );
 };

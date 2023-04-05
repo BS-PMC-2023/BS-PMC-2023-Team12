@@ -1,12 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import Input from '../components/FormElements/Input';
 import { useForm } from '../hooks/FormHook';
 import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../util/validators';
 import Card from '../components/Card';
+import { AuthContext } from '../context/AuthContext';
+import { useHttpClient } from '../hooks/httpHook';
+import Loader from '../components/Loader';
 
 const LoginScreen = () => {
+  const auth = useContext(AuthContext);
+  const { isLoading, sendRequest } = useHttpClient();
+
+  const navigate = useNavigate();
+
   const [formState, inputHandler] = useForm(
     {
       email: {
@@ -23,7 +31,21 @@ const LoginScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(formState.inputs.email.value, formState.inputs.password.value);
+    try {
+      await sendRequest(
+        'http://localhost:5000/api/users/login',
+        'POST',
+        JSON.stringify({
+          email: formState.inputs.email.value,
+          password: formState.inputs.password.value,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+      auth.login();
+      navigate('/');
+    } catch (err) {}
   };
   return (
     <>
@@ -40,7 +62,7 @@ const LoginScreen = () => {
             type="email"
             label="אימייל:"
             validators={[VALIDATOR_EMAIL()]}
-            errorText="אנא הזן כתובת דוא''ל מכללה תקנית."
+            errorText="אנא הזן כתובת דוא'ל מכללה תקנית."
             onInput={inputHandler}
           />
           <Input
@@ -59,7 +81,7 @@ const LoginScreen = () => {
               variant="primary"
               disabled={!formState.isValid}
             >
-              התחבר
+              {isLoading ? <Loader variant="light" /> : <string>התחבר</string>}
             </Button>
           </div>
         </Form>
