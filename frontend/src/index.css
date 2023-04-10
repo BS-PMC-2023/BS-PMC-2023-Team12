@@ -1,13 +1,85 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+main {
+  min-height: 85vh;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+h1 {
+  font-size: 3rem;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.4rem;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+h3 {
+  padding: 0.3rem 0;
+}
+
+.footer {
+  background-color: #f5f5f5;
+  color: #777;
+  padding: 15px 0;
+}
+
+.card {
+  margin: 0 auto;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow: hidden;
+  background: rgb(255, 255, 255);
+  width: 50%;
+}
+
+.card:hover {
+  box-shadow: 0 1px 8px #2d332f;
+}
+
+strong {
+  font-size: 1.4rem;
+}
+th,
+td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.hr-line-right {
+  height: 25px;
+  border-radius: 10px;
+  background: linear-gradient(to right, #099d47, #c8dacf);
+  background-size: 200% 100%;
+  animation: colorSlide 3s ease infinite alternate;
+}
+
+.hr-line-left {
+  height: 25px;
+  border-radius: 10px;
+  background: linear-gradient(to left, #099d47, #c8dacf);
+  background-size: 200% 100%;
+  animation: colorSlide 3s ease infinite alternate;
+}
+
+@keyframes colorSlide {
+  0% {
+    background-position: left;
+  }
+  50% {
+    background-position: right;
+  }
+  100% {
+    background-position: left;
+  }
+}
+
+.paid {
+  text-align: center;
+  font-size: large;
+}
+
+textarea {
+  resize: none;
 }

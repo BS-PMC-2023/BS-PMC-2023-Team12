@@ -1,0 +1,36 @@
+{
+  "name": "bs-pmc-2023-team12",
+  "version": "1.0.0",
+  "description": "SCE -  WMSVC Website",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server",
+    "server": "nodemon backend/server",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BS-PMC-2023/BS-PMC-2023-Team12.git"
+  },
+  "author": "SCE TEAM12",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BS-PMC-2023/BS-PMC-2023-Team12/issues"
+  },
+  "homepage": "https://github.com/BS-PMC-2023/BS-PMC-2023-Team12#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "nodemon": "^2.0.22"
+  }
+}
