@@ -45,7 +45,9 @@ const LoginScreen = () => {
       );
       auth.login();
       navigate('/');
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <>
@@ -62,7 +64,7 @@ const LoginScreen = () => {
             type="email"
             label="אימייל:"
             validators={[VALIDATOR_EMAIL()]}
-            errorText="אנא הזן כתובת דוא'ל מכללה תקנית."
+            errorText="אנא הזן כתובת דוא''ל מכללה תקנית."
             onInput={inputHandler}
           />
           <Input
