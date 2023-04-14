@@ -35,8 +35,40 @@ h3 {
   width: 50%;
 }
 
+.card-img-top{
+  border-radius: 10px;
+}
+
 .card:hover {
   box-shadow: 0 1px 8px #2d332f;
+}
+
+.card_prod{
+  margin: 0 auto;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  padding: 2rem;
+  overflow: hidden;
+  background: rgb(255, 255, 255);
+  width: 70%;
+  height: 100%;
+  text-align: center;
+}
+
+.card_prod:hover{
+  box-shadow: 0 10px 8px #2d332f;
+  scale: 110%;
+}
+
+.card-title-card-prod{
+  margin-top: 16px;
+}
+
+.ProductsScreen{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 strong {
