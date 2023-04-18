@@ -10,7 +10,9 @@ const ProductsScreen = () => {
             img="camera.jpg"
             header="Camera" 
             p="ציוד צילום" 
-            a="צפה בזמינות"/>
+            a="צפה בזמינות"
+            href="./CamerasScreen"
+            />
         </div>
         <div class="col">
             <CardProd

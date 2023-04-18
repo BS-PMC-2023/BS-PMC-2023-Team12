@@ -8,6 +8,7 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import PersonalZone from './screens/PersonalZone';
 import ProductsScreen from './screens/ProductsScreen';
+import CamerasScreens from './screens/CamerasScreen';
 import { AuthContext } from './context/AuthContext';
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/personalZone" element={<PersonalZone />} />
               <Route path="/ProductsScreen" element={<ProductsScreen />} />
+              <Route path="/CamerasScreen" element={<CamerasScreens />} />
             </Routes>
           </Container>
         </main>
