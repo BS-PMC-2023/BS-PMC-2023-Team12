@@ -30,7 +30,7 @@ const Header = () => {
               {/* ----------pesonal zone button---------- */}
               <LinkContainer to="/ProductsScreen">
                 <Nav.Link>
-                  מוצרים להשכרה<i className="fas"></i>
+                  מחסן<i className="fas"></i>
                 </Nav.Link>
               </LinkContainer>
               <LinkContainer to="/PersonalZone">
