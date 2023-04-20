@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const cameraR = require('./routes/cameraR');
 
 dotenv.config();
 
@@ -38,3 +39,6 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+
+app.use("/camera", cameraR);
