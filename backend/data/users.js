@@ -2,13 +2,9 @@ const users = [
   {
     name: 'Admin',
     email: 'admin@ac.sce.ac.il',
+    role: 'Warehouse Manager',
     password: 'admin12',
     isAdmin: true,
-  },
-  {
-    name: 'maor',
-    email: 'maor@ac.sce.ac.il',
-    password: 12345,
   },
 ];
 

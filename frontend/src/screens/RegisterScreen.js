@@ -44,6 +44,7 @@ const RegisterScreen = () => {
           name: formState.inputs.name.value,
           email: formState.inputs.email.value,
           password: formState.inputs.password.value,
+          role: formState.inputs.role.value,
         }),
         {
           'Content-Type': 'application/json',
@@ -52,7 +53,9 @@ const RegisterScreen = () => {
 
       auth.login();
       navigate('/');
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -64,6 +67,7 @@ const RegisterScreen = () => {
         <hr className="hr-line-left"></hr>
         <Form onSubmit={submitHandler}>
           <Input
+            element="textarea"
             id="name"
             type="name"
             label="שם מלא:"
@@ -79,6 +83,18 @@ const RegisterScreen = () => {
             label="אימייל מכללה:"
             validators={[VALIDATOR_EMAIL()]}
             errorText="אנא הזן כתובת דוא''ל מכללה תקנית."
+            onInput={inputHandler}
+          />
+          <Input
+            element="radio"
+            id="role"
+            label="בחר תפקיד:"
+            options={[
+              { label: 'מרצה', value: 'lecturer' },
+              { label: 'סטודנט', value: 'student' },
+            ]}
+            validators={[VALIDATOR_REQUIRE(6)]}
+            errorText="נא לבחור תפקיד."
             onInput={inputHandler}
           />
           <Input

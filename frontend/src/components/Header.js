@@ -28,6 +28,11 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
               {/* ----------pesonal zone button---------- */}
+              <LinkContainer to="/ProductsScreen">
+                <Nav.Link>
+                  מוצרים להשכרה<i className="fas"></i>
+                </Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/PersonalZone">
                 <Nav.Link>
                   אזור אישי<i className="fas"></i>
