@@ -42,8 +42,9 @@ const LoginScreen = () => {
         {
           'Content-Type': 'application/json',
         }
-      );
-      auth.login();
+      )
+      
+      auth.login(formState.inputs.email.value);
       navigate('/');
     } catch (err) {
       console.log(err);
