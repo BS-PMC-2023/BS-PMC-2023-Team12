@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Header from './components/Header';
@@ -9,20 +9,22 @@ import RegisterScreen from './screens/RegisterScreen';
 import PersonalZone from './screens/PersonalZone';
 import ProductsScreen from './screens/ProductsScreen';
 import { AuthContext } from './context/AuthContext';
+import { useAuth } from './hooks/authHook';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { token, login, logout, userId, userName, isAdmin } = useAuth();
 
-  const login = useCallback(() => {
-    setIsLoggedIn(true);
-  }, []);
-
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
-  }, []);
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn: isLoggedIn, login: login, logout: logout }}
+      value={{
+        isLoggedIn: !!token,
+        token: token,
+        userId: userId,
+        userName: userName,
+        isAdmin: isAdmin,
+        login: login,
+        logout: logout,
+      }}
     >
       <Router>
         <Header />
