@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 
 const Header = () => {
@@ -27,33 +27,48 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              {/* ----------pesonal zone button---------- */}
-              <LinkContainer to="/ProductsScreen">
-                <Nav.Link>
-                  מחסן<i className="fas"></i>
-                </Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/PersonalZone">
-                <Nav.Link>
-                  אזור אישי<i className="fas"></i>
-                </Nav.Link>
-              </LinkContainer>
-              <LinkContainer to="/conntact">
+              <LinkContainer to="/contact">
                 <Nav.Link>
                   צור קשר <i className="fas fa-phone"></i>
                 </Nav.Link>
               </LinkContainer>
+
+              <LinkContainer to="/ProductsScreen">
+                <Nav.Link>
+                  מחסן <i className="fas fa-warehouse"></i>
+                </Nav.Link>
+              </LinkContainer>
+
+              {auth.isLoggedIn && auth.isAdmin && (
+                <NavDropdown title="נהל">
+                  <LinkContainer to="/admin/profile">
+                    <NavDropdown.Item>פרופיל</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/userslist">
+                    <NavDropdown.Item>משתמשים</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={auth.logout}>
+                    התנתק
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+              {auth.isLoggedIn && !auth.isAdmin && (
+                <NavDropdown title={auth.userName.split(' ')[0]} id="username">
+                  <LinkContainer to="/PersonalZone">
+                    <NavDropdown.Item>אזור אישי</NavDropdown.Item>
+                  </LinkContainer>
+                  <NavDropdown.Item onClick={auth.logout}>
+                    התנתק
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+
               {!auth.isLoggedIn && (
                 <LinkContainer to="/login">
                   <Nav.Link>
                     התחברות <i className="fas fa-user"></i>
                   </Nav.Link>
                 </LinkContainer>
-              )}
-              {auth.isLoggedIn && (
-                <Button style={{ fontSize: '1.2rem' }} onClick={auth.logout}>
-                  התנתק
-                </Button>
               )}
             </Nav>
           </Navbar.Collapse>
