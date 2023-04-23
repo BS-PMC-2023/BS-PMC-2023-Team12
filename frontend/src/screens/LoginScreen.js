@@ -32,7 +32,7 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await sendRequest(
+      const responseData = await sendRequest(
         'http://localhost:5000/api/users/login',
         'POST',
         JSON.stringify({
@@ -42,9 +42,14 @@ const LoginScreen = () => {
         {
           'Content-Type': 'application/json',
         }
-      )
-      
-      auth.login(formState.inputs.email.value);
+      );
+      auth.login(
+        responseData.userId,
+        responseData.token,
+        responseData.name,
+        responseData.isAdmin
+      );
+      console.log(responseData.isAdmin);
       navigate('/');
     } catch (err) {
       console.log(err);
@@ -72,9 +77,9 @@ const LoginScreen = () => {
             element="input"
             id="password"
             type="password"
-            label="סיסמא:"
+            label="סיסמה:"
             validators={[VALIDATOR_REQUIRE()]}
-            errorText="אנא הכנס סיסמא."
+            errorText="אנא הכנס סיסמה."
             onInput={inputHandler}
           />
           <h2> </h2>
@@ -98,6 +103,7 @@ const LoginScreen = () => {
           </Col>
         </Row>
       </Card>
+      <h2> </h2>
     </>
   );
 };

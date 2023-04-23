@@ -1,17 +1,21 @@
 const HttpError = require('../httpError');
 const User = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+const { default: mongoose } = require('mongoose');
 
-const USERS = [
-  {
-    id: 'u1',
-    name: 'test',
-    email: 'test@test.com',
-    password: 'testers',
-  },
-];
-
-const getUsers = (req, res, next) => {
-  res.json({ users: USERS });
+const getUsers = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.find({}, '-password');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching users failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+  res.json({ users: users.map(user => user.toObject({ getters: true })) });
 };
 
 const register = async (req, res, next) => {
@@ -44,7 +48,29 @@ const register = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
+  let token;
+  try {
+    token = jwt.sign(
+      {
+        userId: createdUser.id,
+        email: createdUser.email,
+        name: createdUser.name,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+  } catch (err) {
+    const error = new HttpError('ההרשמה נכשלה, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+  res.status(201).json({
+    userId: createdUser.id,
+    email: createdUser.email,
+    name: createdUser.name,
+    isAdmin: createdUser.isAdmin,
+    token: token,
+  });
 };
 
 const login = async (req, res, next) => {
@@ -64,9 +90,66 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: 'Logged in!' });
+  let token;
+  try {
+    token = jwt.sign(
+      {
+        userId: existingUser.id,
+        email: existingUser.email,
+        name: existingUser.name,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+  } catch (err) {
+    const error = new HttpError('הכניסה נכשלה, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+  res.json({
+    userId: existingUser.id,
+    email: existingUser.email,
+    name: existingUser.name,
+    isAdmin: existingUser.isAdmin,
+    token: token,
+  });
 };
 
+const deleteUser = async (req, res, next) => {
+  const userId = req.params.id;
+  console.log(req.params.id);
+  let user;
+  try {
+    user = await User.findOne({ email: userId })
+    console.log(user);
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete user.',
+      500
+    );
+    return next(error);
+  }
+
+  if (!user) {
+    const error = new HttpError('Could not find user for this id.', 404);
+    return next(error);
+  }
+
+  try {
+    await User.deleteOne({email:userId});
+  } catch (err) {
+    const error = new HttpError(
+      'Something went wrong, could not delete place.',
+      500
+    );
+    return next(error);
+  }
+  
+  res.status(200).json({ message: 'Deleted user.' });
+};
+
+
 exports.getUsers = getUsers;
+exports.deleteUser=deleteUser;
 exports.register = register;
 exports.login = login;

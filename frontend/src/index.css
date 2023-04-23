@@ -35,7 +35,7 @@ h3 {
   width: 50%;
 }
 
-.card-img-top{
+.card-img-top {
   border-radius: 10px;
 }
 
@@ -43,7 +43,7 @@ h3 {
   box-shadow: 0 1px 8px #2d332f;
 }
 
-.card_prod{
+.card_prod {
   margin: 0 auto;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
   border-radius: 6px;
@@ -55,16 +55,16 @@ h3 {
   text-align: center;
 }
 
-.card_prod:hover{
+.card_prod:hover {
   box-shadow: 0 10px 8px #2d332f;
   scale: 110%;
 }
 
-.card-title-card-prod{
+.card-title-card-prod {
   margin-top: 16px;
 }
 
-.ProductsScreen{
+.ProductsScreen {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -153,5 +153,15 @@ td {
 }
 
 .radio-container:hover input ~ .radio-indicator {
+  background-color: #c8dacf;
+}
+
+div.dropdown-menu.show {
+  background-color: #eee;
+  text-align: right;
+  min-width: 100px;
+}
+a.dropdown-item:hover {
+  color: #ffffff;
   background-color: #c8dacf;
 }

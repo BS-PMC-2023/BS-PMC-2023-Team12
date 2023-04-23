@@ -12,12 +12,15 @@ import Card from '../components/Card';
 import { AuthContext } from '../context/AuthContext';
 import { useHttpClient } from '../hooks/httpHook';
 import Loader from '../components/Loader';
+import PasswordStrengthBar from 'react-password-strength-bar';
 
 const RegisterScreen = () => {
   const auth = useContext(AuthContext);
   const { isLoading, sendRequest } = useHttpClient();
 
   const navigate = useNavigate();
+
+  const word = ['חלש', 'חלש', 'בסדר', 'טוב', 'חזק'];
 
   const [formState, inputHandler] = useForm(
     {
@@ -37,7 +40,7 @@ const RegisterScreen = () => {
     e.preventDefault();
 
     try {
-      await sendRequest(
+      const responseData = await sendRequest(
         'http://localhost:5000/api/users/register',
         'POST',
         JSON.stringify({
@@ -51,7 +54,12 @@ const RegisterScreen = () => {
         }
       );
 
-      auth.login();
+      auth.login(
+        responseData.userId,
+        responseData.token,
+        responseData.name,
+        responseData.isAdmin
+      );
       navigate('/');
     } catch (err) {
       console.log(err);
@@ -101,11 +109,18 @@ const RegisterScreen = () => {
             element="input"
             id="password"
             type="password"
-            label="סיסמא:"
+            label="סיסמה:"
             validators={[VALIDATOR_MINLENGTH(6)]}
             errorText="נא להזין סיסמה חוקית, לפחות 6 תווים."
             onInput={inputHandler}
           />
+          {formState.inputs.password.value.length >= 1 && (
+            <PasswordStrengthBar
+              shortScoreWord="קצר מדי"
+              scoreWords={word}
+              password={formState.inputs.password.value}
+            />
+          )}
           <h2> </h2>
           <div className="d-grid gap-3">
             <Button
