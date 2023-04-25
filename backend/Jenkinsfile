@@ -5,10 +5,10 @@ pipeline{
             args '-p 5000:5000'
         }
     }
-    enviorment{
+    environment{
         CI='true'
     }
-    satges{
+    stages{
         stage('build'){
             steps{
                 sh "pwd"
