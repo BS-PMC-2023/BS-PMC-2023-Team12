@@ -33,7 +33,7 @@ const CamerasScreen = () => {
               {item.available == true ? (
                 <Badge bg="primary" pill>
                   available
-                </Badge>
+                </Badge> 
               ) : (
                   <div>
                     student id: {item.studentID}

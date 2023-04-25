@@ -1,0 +1,20 @@
+pipline{
+    agent{
+        docker{
+            image 'node:lts-buster-slim'
+            args '-p 5000:5000'
+        }
+    }
+    enviorment{
+        CI='true'
+    }
+    satges{
+        stage('build'){
+            steps{
+                sh "pwd"
+                sh "cd backend"
+                sh "npm start server"
+            }
+        }
+    }
+}
