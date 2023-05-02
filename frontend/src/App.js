@@ -12,6 +12,7 @@ import CamerasScreens from './screens/CamerasScreen';
 import UserListScreen from './screens/UserListScreen';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
+import RecordingScreen from './screens/RecordingScreen';
 
 const App = () => {
   const { token, login, logout, userId, userName, isAdmin } = useAuth();
@@ -39,6 +40,7 @@ const App = () => {
               <Route path="/personalZone" element={<PersonalZone />} />
               <Route path="/ProductsScreen" element={<ProductsScreen />} />
               <Route path="/CamerasScreen" element={<CamerasScreens />} />
+              <Route path="/RecordingScreen" element={<RecordingScreen />} />
               <Route path="/admin/userslist" element={<UserListScreen />} />
             </Routes>
           </Container>

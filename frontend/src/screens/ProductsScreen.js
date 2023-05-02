@@ -19,7 +19,9 @@ const ProductsScreen = () => {
             img="/microphone.jpg" 
             header="Recording" 
             p="ציוד הקלטה" 
-            a="צפה בזמינות"/>
+            a="צפה בזמינות"
+            href="./RecordingScreen"
+            />
         </div>
         <div class="col">
             <CardProd
