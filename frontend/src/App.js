@@ -8,11 +8,10 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import PersonalZone from './screens/PersonalZone';
 import ProductsScreen from './screens/ProductsScreen';
-import CamerasScreens from './screens/CamerasScreen';
+import ProductsLst from './components/ProductScreen/ProductsLst';
 import UserListScreen from './screens/UserListScreen';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
-import RecordingScreen from './screens/RecordingScreen';
 
 const App = () => {
   const { token, login, logout, userId, userName, isAdmin } = useAuth();
@@ -39,8 +38,8 @@ const App = () => {
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/personalZone" element={<PersonalZone />} />
               <Route path="/ProductsScreen" element={<ProductsScreen />} />
-              <Route path="/CamerasScreen" element={<CamerasScreens />} />
-              <Route path="/RecordingScreen" element={<RecordingScreen />} />
+              <Route path="/CamerasScreen" element={<ProductsLst myProp="camera" />} />
+              <Route path="/RecordingScreen" element={<ProductsLst myProp="recording" />} />
               <Route path="/admin/userslist" element={<UserListScreen />} />
             </Routes>
           </Container>
