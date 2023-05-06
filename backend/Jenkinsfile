@@ -15,7 +15,7 @@ pipeline{
                 sh "cd backend"
                 sh "ls"
                 sh "npm install"
-                sh "npm start server"
+                // sh "npm start server"
             }
         }
     }
