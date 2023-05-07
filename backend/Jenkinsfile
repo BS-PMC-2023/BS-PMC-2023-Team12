@@ -11,11 +11,8 @@ pipeline{
     stages{
         stage('build'){
             steps{
-                sh "pwd"
                 sh "cd backend"
-                sh "ls"
                 sh "npm install"
-                // sh "npm start server"
             }
         }
     }

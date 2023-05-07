@@ -19,7 +19,7 @@ const CamerasScreen = (props) => {
 
   return (
     <div>
-      <h1>Camera List</h1>
+      <h1>{props.name} List</h1>
         {data.map((item) => (
           //<li key={item.id}>{item.name}</li>
           <ListGroup as="ol"  key={item._id}>

@@ -10,6 +10,7 @@ import PersonalZone from './screens/PersonalZone';
 import ProductsScreen from './screens/ProductsScreen';
 import ProductsLst from './components/ProductScreen/ProductsLst';
 import UserListScreen from './screens/UserListScreen';
+import UpdatesProducts from './screens/UpdatesProducts';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
 
@@ -38,9 +39,10 @@ const App = () => {
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/personalZone" element={<PersonalZone />} />
               <Route path="/ProductsScreen" element={<ProductsScreen />} />
-              <Route path="/CamerasScreen" element={<ProductsLst myProp="camera" />} />
-              <Route path="/RecordingScreen" element={<ProductsLst myProp="recording" />} />
+              <Route path="/CamerasScreen" element={<ProductsLst name="Camera" myProp="camera" />} />
+              <Route path="/RecordingScreen" element={<ProductsLst name="Recording" myProp="recording" />} />
               <Route path="/admin/userslist" element={<UserListScreen />} />
+              <Route path="/admin/UpdatesProducts" element={<UpdatesProducts />} />
             </Routes>
           </Container>
         </main>
