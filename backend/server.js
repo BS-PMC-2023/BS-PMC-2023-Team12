@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const cameraR = require('./routes/cameraR');
+const recordingR = require('./routes/recordingR');
 
 dotenv.config();
 
@@ -42,3 +43,4 @@ mongoose
 
 
 app.use("/camera", cameraR);
+app.use("/recording", recordingR);
