@@ -47,6 +47,9 @@ const Header = () => {
                   <LinkContainer to="/admin/userslist">
                     <NavDropdown.Item>משתמשים</NavDropdown.Item>
                   </LinkContainer>
+                  <LinkContainer to="/admin/updatesproducts">
+                    <NavDropdown.Item>מחסן</NavDropdown.Item>
+                  </LinkContainer>
                   <LinkContainer to="/">
                     <NavDropdown.Item onClick={auth.logout}>
                       התנתק

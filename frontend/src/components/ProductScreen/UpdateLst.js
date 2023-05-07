@@ -7,6 +7,18 @@ import axios from 'axios';
 const UpdateLst = () => {
     const [data1, setData1] = useState([]);
     const [data2, setData2] = useState([]);
+    const [deletedCamera, setDeletedCamera] = useState(null);
+
+    const deleteCamera = async (id) => {
+      try {
+        const res = await axios.delete(`/camera/${id}`);
+        console.log(res.data); // Success message from server
+        setDeletedCamera(id);
+      } catch (err) {
+        console.error(err.message); // Error message from server
+      }
+    };
+
     
     useEffect(() => {
         const fetchData = async () => {
@@ -18,7 +30,7 @@ const UpdateLst = () => {
         };
       
         fetchData();
-      }, []);
+      }, [deletedCamera]);
 
     const func = (deleted) => {
         console.log(deleted);
@@ -45,7 +57,7 @@ const UpdateLst = () => {
                     <Badge bg="primary" pill>
                       פנוי
                     </Badge> 
-                    <button type="button" className="btn btn-primary">מחק</button>
+                    <button onClick={() => deleteCamera(item.id)}>Delete Camera</button>
                   </div>
               ) : (
                   <div 
