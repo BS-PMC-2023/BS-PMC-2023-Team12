@@ -57,7 +57,7 @@ const UpdateLst = () => {
                     <Badge bg="primary" pill>
                       פנוי
                     </Badge> 
-                    <button onClick={() => deleteCamera(item.id)}>Delete Camera</button>
+                    <button type="button" className="btn btn-primary" onClick={() => deleteCamera(item.id)}>Delete Camera</button>
                   </div>
               ) : (
                   <div 
