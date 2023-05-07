@@ -10,6 +10,7 @@ const app = express();
 
 
 router.get('/', usersController.getUsers);
+router.delete('/:id',usersController.deleteUser);
 router.post('/register', usersController.register);
 router.post('/login', usersController.login);
 
