@@ -47,12 +47,11 @@ const Header = () => {
                   <LinkContainer to="/admin/userslist">
                     <NavDropdown.Item>משתמשים</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/admin/updatesproducts">
-                    <NavDropdown.Item>מחסן</NavDropdown.Item>
+                  <LinkContainer to="/">
+                    <NavDropdown.Item onClick={auth.logout}>
+                      התנתק
+                    </NavDropdown.Item>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={auth.logout}>
-                    התנתק
-                  </NavDropdown.Item>
                 </NavDropdown>
               )}
               {auth.isLoggedIn && !auth.isAdmin && (

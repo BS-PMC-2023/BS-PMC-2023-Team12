@@ -11,12 +11,13 @@ import {
 import Card from '../components/Card';
 import { AuthContext } from '../context/AuthContext';
 import { useHttpClient } from '../hooks/httpHook';
+import Message from '../components/Message';
 import Loader from '../components/Loader';
 import PasswordStrengthBar from 'react-password-strength-bar';
 
 const RegisterScreen = () => {
   const auth = useContext(AuthContext);
-  const { isLoading, sendRequest } = useHttpClient();
+  const { isLoading, error, sendRequest } = useHttpClient();
 
   const navigate = useNavigate();
 
@@ -53,7 +54,6 @@ const RegisterScreen = () => {
           'Content-Type': 'application/json',
         }
       );
-
       auth.login(
         responseData.userId,
         responseData.token,
@@ -61,9 +61,7 @@ const RegisterScreen = () => {
         responseData.isAdmin
       );
       navigate('/');
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   return (
@@ -73,6 +71,7 @@ const RegisterScreen = () => {
         <hr className="hr-line-right"></hr>
         <h1>הרשמה</h1>
         <hr className="hr-line-left"></hr>
+        {error && <Message variant="danger">{error}</Message>}
         <Form onSubmit={submitHandler}>
           <Input
             element="textarea"

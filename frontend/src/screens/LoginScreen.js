@@ -7,11 +7,12 @@ import { VALIDATOR_EMAIL, VALIDATOR_REQUIRE } from '../util/validators';
 import Card from '../components/Card';
 import { AuthContext } from '../context/AuthContext';
 import { useHttpClient } from '../hooks/httpHook';
+import Message from '../components/Message';
 import Loader from '../components/Loader';
 
 const LoginScreen = () => {
   const auth = useContext(AuthContext);
-  const { isLoading, sendRequest } = useHttpClient();
+  const { isLoading, error, sendRequest } = useHttpClient();
 
   const navigate = useNavigate();
 
@@ -51,9 +52,7 @@ const LoginScreen = () => {
       );
       console.log(responseData.isAdmin);
       navigate('/');
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
   return (
     <>
@@ -62,6 +61,7 @@ const LoginScreen = () => {
         <hr className="hr-line-right"></hr>
         <h1>התחברות</h1>
         <hr className="hr-line-left"></hr>
+        {error && <Message variant="danger">{error}</Message>}
         <Form onSubmit={submitHandler}>
           <Input
             element="input"
