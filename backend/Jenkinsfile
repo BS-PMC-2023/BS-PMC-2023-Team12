@@ -17,6 +17,7 @@ pipeline{
         }
         stage('test'){
             steps{
+                sh "ls"
                 sh "cd frontend"
                 sh "ls"
                 sh "npm run test"
