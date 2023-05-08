@@ -4,7 +4,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
 
 
-const CamerasScreen = (props) => {
+const ProductsLst = (props) => {
   const [data, setData] = useState([]);
 
 
@@ -72,4 +72,4 @@ const CamerasScreen = (props) => {
   );
 };
 
-export default CamerasScreen;
+export default ProductsLst;
