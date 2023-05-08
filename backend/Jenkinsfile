@@ -15,5 +15,13 @@ pipeline{
                 sh "npm install"
             }
         }
+        stage('test'){
+            steps{
+                sh "cd .."
+                sh "ls"
+                sh "cd frontend"
+                sh "npm run test"
+            }
+        }
     }
 }
