@@ -1,7 +1,24 @@
-import React from 'react';
+import React, {} from 'react';
 
 const PersonalZone = () => {
-  return <h1 className="ml">אזור אישי</h1>;
-};
+
+
+  return (
+  <>
+    <body>
+      <center>
+        <h1 className="ml" id="add">אזור אישי</h1>
+        
+      </center>
+    </body>
+    {}
+  </>
+  );
+
+
+}
+
+//yovel buld
+
 
 export default PersonalZone;

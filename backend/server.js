@@ -24,6 +24,9 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || 'An unknown error occurred!' });
 });
 
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: false }));
+
 const PORT = process.env.PORT || 5000;
 
 mongoose
@@ -41,6 +44,5 @@ mongoose
     console.log(err);
   });
 
-
-app.use("/camera", cameraR);
-app.use("/recording", recordingR);
+app.use('/camera', cameraR);
+app.use('/recording', recordingR);

@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import SendEmailScreen from './screens/SendEmailScreen';
 import PersonalZone from './screens/PersonalZone';
 import ProductsScreen from './screens/ProductsScreen';
 import ProductsLst from './components/ProductScreen/ProductsLst';
@@ -37,12 +38,22 @@ const App = () => {
               <Route path="/" element={<HomeScreen />} />
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
+              <Route path="/sendsmailscreen" element={<SendEmailScreen />} />
               <Route path="/personalZone" element={<PersonalZone />} />
               <Route path="/ProductsScreen" element={<ProductsScreen />} />
-              <Route path="/CamerasScreen" element={<ProductsLst name="Camera" myProp="camera" />} />
-              <Route path="/RecordingScreen" element={<ProductsLst name="Recording" myProp="recording" />} />
+              <Route
+                path="/CamerasScreen"
+                element={<ProductsLst name="Camera" myProp="camera" />}
+              />
+              <Route
+                path="/RecordingScreen"
+                element={<ProductsLst name="Recording" myProp="recording" />}
+              />
               <Route path="/admin/userslist" element={<UserListScreen />} />
-              <Route path="/admin/UpdatesProducts" element={<UpdatesProducts />} />
+              <Route
+                path="/admin/UpdatesProducts"
+                element={<UpdatesProducts />}
+              />
             </Routes>
           </Container>
         </main>
