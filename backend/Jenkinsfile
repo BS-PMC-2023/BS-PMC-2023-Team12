@@ -36,12 +36,7 @@ pipeline{
         sh 'cd frontend && npm install'
       }
     }
-    
-    stage('React Build') {
-      steps {
-        sh 'cd frontend && npm run build'
-      }
-    }
+
     stage('Node.js Test') {
       steps {
         sh 'cd frontend && npm run test'
