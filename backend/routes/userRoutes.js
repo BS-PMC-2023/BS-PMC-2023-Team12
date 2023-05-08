@@ -1,17 +1,15 @@
-const User = require('../models/userModel');
 const express = require('express');
-const bodyParser = require('body-parser');
 
 const usersController = require('../controllers/userController');
 
 const router = express.Router();
 
-const app = express();
-
-
 router.get('/', usersController.getUsers);
-router.delete('/:id',usersController.deleteUser);
+router.delete('/:id', usersController.deleteUser);
 router.post('/register', usersController.register);
 router.post('/login', usersController.login);
+router.post('/forgot-password', usersController.forogotPassword);
+router.get('/reset-password/:id/:token', usersController.resetPassword);
+router.post('/reset-password/:id/:token', usersController.changePassword);
 
 module.exports = router;
