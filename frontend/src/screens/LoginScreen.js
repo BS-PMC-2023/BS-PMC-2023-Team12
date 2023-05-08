@@ -70,7 +70,7 @@ const LoginScreen = () => {
             type="email"
             label="אימייל:"
             validators={[VALIDATOR_EMAIL()]}
-            errorText="אנא הזן כתובת דוא''ל מכללה תקנית."
+            errorText="אנא הזן כתובת דוא'ל מכללה תקנית."
             onInput={inputHandler}
           />
           <Input
@@ -82,6 +82,16 @@ const LoginScreen = () => {
             errorText="אנא הכנס סיסמה."
             onInput={inputHandler}
           />
+          <Row className="py-0.1">
+            <Col className="text-center">
+              <strong style={{ fontSize: '1rem' }}> .שכחת סיסמה? לחץ </strong>
+              <Link to={'/sendsmailscreen'}>
+                {' '}
+                <strong style={{ fontSize: '1rem' }}>כאן</strong>
+              </Link>{' '}
+              <strong style={{ fontSize: '1rem' }}>כדי לאפס אותה </strong>
+            </Col>
+          </Row>
           <h2> </h2>
           <div className="d-grid gap-3">
             <Button
@@ -93,10 +103,9 @@ const LoginScreen = () => {
             </Button>
           </div>
         </Form>
-        <h2> </h2>
         <Row className="py-3">
           <Col className="text-center">
-            <strong>עדיין לא רשום למערכת?</strong>{' '}
+            <strong> עדיין לא רשום למערכת?</strong>{' '}
             <Link to={'/register'}>
               <strong>הירשם </strong>
             </Link>
