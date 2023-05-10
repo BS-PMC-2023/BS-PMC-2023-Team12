@@ -9,38 +9,22 @@ pipeline{
         CI='true'
     }
     stages{
-//         stage('build'){
-//             steps{
-//                 sh "ls"
-//                 sh "cd backend"
-//                 sh "ls"
-//                 sh "npm install"
-//             }
-//         }
-//         stage('test'){
-//             steps{
-//                 sh "ls"
-//                 sh "cd frontend"
-//                 sh "ls"
-//                 sh "npm run test"
-//             }
-//         }
-        stage('Node.js Install') {
-      steps {
-        sh 'cd backend && npm install'
-      }
-    }
+        stage('Node.js builed') {
+            steps {
+                sh 'cd backend && npm install'
+            }
+        }
         
-    stage('React Install') {
-      steps {
-        sh 'cd frontend && npm install'
-      }
-    }
+        stage('React builed') {
+            steps {
+                 sh 'cd frontend && npm install'
+            }
+        }
 
-    stage('Node.js Test') {
-      steps {
-        sh 'cd frontend && npm run test'
-      }
-    }
+    stage('tests') {
+            steps {
+                sh 'cd frontend && npm run test'
+            }
+        }
     }
 }
