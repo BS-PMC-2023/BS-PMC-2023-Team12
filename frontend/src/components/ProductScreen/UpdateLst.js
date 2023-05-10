@@ -8,14 +8,14 @@ const UpdateLst = () => {
     const [data1, setData1] = useState([]);
     const [data2, setData2] = useState([]);
     const [deletedCamera, setDeletedCamera] = useState(null);
-
+// Success message from server.
     const deleteCamera = async (id) => {
       try {
         const res = await axios.delete(`/camera/${id}`);
-        console.log(res.data); // Success message from server
+        console.log(res.data); 
         setDeletedCamera(id);
       } catch (err) {
-        console.error(err.message); // Error message from server
+        console.error(err.message); // Error message from server.
       }
     };
 

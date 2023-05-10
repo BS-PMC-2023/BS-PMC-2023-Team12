@@ -21,7 +21,6 @@ const ProductsLst = (props) => {
     <div>
       <h1>{props.name} List</h1>
         {data.map((item) => (
-          //<li key={item.id}>{item.name}</li>
           <ListGroup as="ol"  key={item._id}>
             <ListGroup.Item
               as="li"
@@ -59,7 +58,7 @@ const ProductsLst = (props) => {
                 </Badge> 
               ) : (
                   <div>
-                    student id: {item.studentID}
+                    student id:  {item.studentID}
                     <Badge bg="primary" pill>
                     unavailable
                     </Badge>
