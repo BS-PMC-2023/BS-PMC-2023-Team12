@@ -1,7 +1,11 @@
 import React, { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
+import { Route, Routes } from 'react-router-dom'
+
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
+import SearchBox from './SearchBox'
+
 
 const Header = () => {
   const auth = useContext(AuthContext);
@@ -21,15 +25,22 @@ const Header = () => {
                 width="60"
                 height="60"
                 className="d-inline-block align-top"
+                
               />
+              
             </Navbar.Brand>
+            
           </LinkContainer>
+          <SearchBox/>
+
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
+              
               <LinkContainer to="/contact">
                 <Nav.Link>
                   צור קשר <i className="fas fa-phone"></i>
+                  
                 </Nav.Link>
               </LinkContainer>
 
@@ -75,10 +86,15 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
+              
             </Nav>
+
           </Navbar.Collapse>
+
         </Container>
+        
       </Navbar>
+      
     </header>
   );
 };

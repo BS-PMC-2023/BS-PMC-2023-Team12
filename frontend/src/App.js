@@ -15,6 +15,7 @@ import UpdatesProducts from './screens/UpdatesProducts';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
 
+
 const App = () => {
   const { token, login, logout, userId, userName, isAdmin } = useAuth();
 
@@ -36,6 +37,9 @@ const App = () => {
           <Container>
             <Routes>
               <Route path="/" element={<HomeScreen />} />
+
+              <Route path='/search/:keyword' component={HomeScreen} />
+
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/sendsmailscreen" element={<SendEmailScreen />} />
