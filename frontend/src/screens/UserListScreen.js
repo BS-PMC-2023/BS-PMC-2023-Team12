@@ -1,8 +1,8 @@
+
 import React, { useEffect, useState } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Form } from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
-
 import Loader from '../components/Loader';
 
 const UserListScreen = () => {
@@ -35,6 +35,26 @@ const UserListScreen = () => {
       console.log(err);
     }
   };
+
+  const updateAdmin = async (user) => {
+    try {
+      user.isAdmin = !user.isAdmin;
+      await sendRequest(
+        `http://localhost:5000/api/users/updateAdmin/${user._id}`,
+        'PUT',
+        JSON.stringify({
+          isAdmin: !user.isAdmin
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+
   return (
     <>
       <h1>רשימת משתמשים</h1>
@@ -44,7 +64,6 @@ const UserListScreen = () => {
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
-              {/* <th>ת"ז</th> */}
               <th>שם</th>
               <th>אימייל</th>
               <th>הרשאות מנהל</th>
@@ -54,17 +73,16 @@ const UserListScreen = () => {
           <tbody>
             {loadedUsers?.map((user) => (
               <tr key={user._id}>
-                {/* <td>{user._id}</td> */}
                 <td>{user.name}</td>
                 <td>
                   <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>
                 <td>
-                  {user.isAdmin ? (
-                    <i className="fas fa-check" style={{ color: 'green' }}></i>
-                  ) : (
-                    <i className="fas fa-times" style={{ color: 'red' }}></i>
-                  )}
+                  <Form.Check
+                    type="checkbox"
+                    checked={user.isAdmin}
+                    onChange={() => updateAdmin(user)}
+                  />
                 </td>
                 <td>
                   <LinkContainer to={`/admin/user/${user._id}/edit`}>

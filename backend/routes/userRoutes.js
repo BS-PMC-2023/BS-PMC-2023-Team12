@@ -12,5 +12,6 @@ router.post('/forgot-password', usersController.forogotPassword);
 router.get('/reset-password/:id/:token', usersController.resetPassword);
 router.post('/reset-password/:id/:token', usersController.changePassword);
 router.get('/personalZone', usersController.updateUserProfile).put(usersController.updateUserProfile);
+router.put('/updateAdmin/:id/:token', usersController.updateAdmin);
 
 module.exports = router;

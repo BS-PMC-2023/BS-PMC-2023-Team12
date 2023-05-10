@@ -310,6 +310,24 @@ const deleteUser = async (req, res, next) => {
   res.status(200).json({ message: 'Deleted user.' });
 };
 
+const updateAdmin = async (req, res, next) => {
+  const { id } = req.params;
+
+  let user;
+
+  try {
+    const user = await User.findById(req.user._id)
+    user.isAdmin = !user.isAdmin
+  } catch (err) {
+    return next(err);
+  }
+
+  res.json({
+    isAdmin: user.isAdmin,
+  });
+};
+
+
 exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.register = register;
@@ -318,3 +336,4 @@ exports.forogotPassword = forogotPassword;
 exports.resetPassword = resetPassword;
 exports.changePassword = changePassword;
 exports.updateUserProfile = updateUserProfile;
+exports.updateAdmin = updateAdmin;
