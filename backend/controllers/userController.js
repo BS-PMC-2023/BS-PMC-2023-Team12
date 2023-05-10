@@ -18,6 +18,50 @@ const getUsers = async (req, res, next) => {
   res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
+//get current user profile data
+const getUserProfile = async (req, res, next) =>{
+
+  const user = await User.findById(req.user._id)
+
+  if(user){
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    })
+  }else{
+    res.status(404)
+    throw new Error('User not found')
+  }
+};
+
+//update current user profile data
+const updateUserProfile = async (req, res, next) =>{
+
+  const user = await User.findById(req.user._id)
+
+  if(user){
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.email
+    if(req.body.password){
+      user.password = req.body.password
+    }
+
+    const updatedUser = await updatedUser.save()
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email:updatedUser.email,
+      isAdmin: updatedUser.isAdmin
+    })
+  }else{
+    res.status(404)
+    throw new Error('User not found')
+  }
+};
+
 const register = async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
@@ -273,3 +317,4 @@ exports.login = login;
 exports.forogotPassword = forogotPassword;
 exports.resetPassword = resetPassword;
 exports.changePassword = changePassword;
+exports.updateUserProfile = updateUserProfile;
