@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
-import {
-  Form,
-  Button,
-  FormGroup,
-  FormLabel,
-  FormControl,
-} from 'react-bootstrap';
+import { Form, Button, FormGroup, FormLabel } from 'react-bootstrap';
 import FormContainer from '../FormContainer';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Message from '../Message';
+import { useHttpClient } from '../../hooks/httpHook';
+import { AuthContext } from '../../context/AuthContext';
 
 const ProductsLst = (props) => {
+  const auth = useContext(AuthContext);
+  const { error, sendRequest } = useHttpClient();
+
   const [data, setData] = useState([]);
   const [borrowingItemId, setBorrowingItemId] = useState(null);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [returnDate, setRetunrDate] = useState(null);
+  let [borrowDate, setBorrowDate] = useState(new Date());
+  let [returnDate, setRetunrDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,9 +32,55 @@ const ProductsLst = (props) => {
     setBorrowingItemId(id);
   };
 
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    const borrow = borrowDate;
+    const fyyyy = borrow.getFullYear();
+    let fmm = borrow.getMonth() + 1;
+    let fdd = borrow.getDate();
+
+    if (fdd < 10) fdd = '0' + fdd;
+    if (fmm < 10) fmm = '0' + fmm;
+
+    const formattedBorrow = fdd + '/' + fmm + '/' + fyyyy;
+    borrowDate = formattedBorrow;
+
+    const returndate = returnDate;
+    const ryyyy = returndate.getFullYear();
+    let rmm = returndate.getMonth() + 1;
+    let rdd = returndate.getDate();
+
+    if (rdd < 10) rdd = '0' + rdd;
+    if (rmm < 10) rmm = '0' + rmm;
+
+    const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
+    returnDate = formattedReturnDate;
+    try {
+      await sendRequest(
+        'http://localhost:5000/borrow/addborrow',
+        'POST',
+        JSON.stringify({
+          user: auth.userId,
+          name: auth.userName,
+          borrowDate: formattedBorrow,
+          returnDate: formattedReturnDate,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    alert('השאלת הציוד בוצע בהצלחה');
+  };
+
   return (
     <div>
       <h1>{props.name} List</h1>
+      {error && <Message variant="danger">{error}</Message>}
+
       {data.map((item) => (
         <ListGroup as="ol" key={item._id}>
           <ListGroup.Item as="li">
@@ -44,7 +90,7 @@ const ProductsLst = (props) => {
               <br />
               {item.available ? (
                 <div className="d-flex justify-content-between align-items-start">
-                  <Badge bg="primary" pill>
+                  <Badge bg="primary" pill style={{ fontSize: 15 }}>
                     פנוי
                   </Badge>
                   <button
@@ -57,20 +103,25 @@ const ProductsLst = (props) => {
                 </div>
               ) : (
                 <div className="d-flex justify-content-between align-items-start">
-                  <Badge bg="primary" pill>
+                  <Badge bg="danger" pill style={{ fontSize: 15 }}>
                     תפוס
                   </Badge>
                   <div>student id: {item.studentID}</div>
                 </div>
               )}
             </div>
+
             {borrowingItemId === item._id && (
               <React.Fragment>
                 <FormContainer>
-                  <Form>
+                  <Form onSubmit={submitHandler}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div className="d-grid gap-3">
-                        <Button type="submit" variant="primary">
+                        <Button
+                          type="submit"
+                          variant="primary"
+                          disabled={!returnDate || !borrowDate}
+                        >
                           שריין
                         </Button>
                       </div>
@@ -96,8 +147,8 @@ const ProductsLst = (props) => {
                           <strong>:תאריך השאלה</strong>
                         </FormLabel>
                         <DatePicker
-                          selected={startDate}
-                          onChange={(date) => setStartDate(date)}
+                          selected={borrowDate}
+                          onChange={(date) => setBorrowDate(date)}
                           dateFormat="dd/MM/yyyy"
                           minDate={new Date()}
                         />
