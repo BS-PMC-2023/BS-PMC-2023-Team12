@@ -310,21 +310,22 @@ const deleteUser = async (req, res, next) => {
   res.status(200).json({ message: 'Deleted user.' });
 };
 
+//ipdate the admin rights to the user in the database
 const updateAdmin = async (req, res, next) => {
   const { id } = req.params;
-
-  let user;
-
+  
   try {
-    const user = await User.findById(req.user._id)
-    user.isAdmin = !user.isAdmin
+    const user = await User.findOne({_id: id});
+    user.isAdmin = !user.isAdmin;
+    const UpdateUser = await user.save();
+  
+    res.json({
+      isAdmin: UpdateUser.isAdmin,
+    });  
   } catch (err) {
     return next(err);
   }
 
-  res.json({
-    isAdmin: user.isAdmin,
-  });
 };
 
 

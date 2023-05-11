@@ -36,6 +36,7 @@ const UserListScreen = () => {
     }
   };
 
+  //send order to database api to change the admin rights of the user
   const updateAdmin = async (user) => {
     try {
       user.isAdmin = !user.isAdmin;
@@ -49,6 +50,7 @@ const UserListScreen = () => {
           'Content-Type': 'application/json',
         }
       );
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }

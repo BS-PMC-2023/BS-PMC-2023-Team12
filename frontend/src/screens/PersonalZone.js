@@ -48,19 +48,13 @@ const PersonalZoneScreen = () => {
         'POST',
         JSON.stringify({
           name: formState.inputs.name.value,
-          email: formState.inputs.email.value,
+          password: formState.inputs.password.value,
         }),
         {
           'Content-Type': 'application/json',
         }
       );
-      auth.login(
-        responseData.userId,
-        responseData.token,
-        responseData.name,
-        responseData.isAdmin
-      );
-      navigate('/');
+      window.location.reload();
     } catch (err) {}
   };
 
