@@ -19,14 +19,11 @@ import { Card } from 'react-bootstrap';
 const PersonalZoneScreen = () => {
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest } = useHttpClient();
-
-  const navigate = useNavigate();
-
   const word = ['חלש', 'חלש', 'בסדר', 'טוב', 'חזק'];
 
   const [formState, inputHandler] = useForm(
     {
-      email: {
+      name: {
         value: '',
         isValid: false,
       },
@@ -38,13 +35,11 @@ const PersonalZoneScreen = () => {
     false
   );
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
+  const submitHandler = async (user) => {
     try {
-      const responseData = await sendRequest(
-        'http://localhost:5000/api/users/personalZone',
-        'POST',
+      await sendRequest(
+        `http://localhost:5000/api/users/personalZone/${user._id}`,
+        'PUT',
         JSON.stringify({
           name: formState.inputs.name.value,
           password: formState.inputs.password.value,
@@ -54,7 +49,9 @@ const PersonalZoneScreen = () => {
         }
       );
       window.location.reload();
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -84,7 +81,6 @@ const PersonalZoneScreen = () => {
             validators={[VALIDATOR_MINLENGTH(6)]}
             errorText="נא להזין סיסמה חוקית, לפחות 6 תווים."
             onInput={inputHandler}
-            value = {auth.password}
           />
           {formState.inputs.password.value.length >= 1 && (
             <PasswordStrengthBar

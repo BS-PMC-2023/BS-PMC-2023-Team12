@@ -36,32 +36,6 @@ const getUserProfile = async (req, res, next) =>{
   }
 };
 
-//update current user profile data
-const updateUserProfile = async (req, res, next) =>{
-
-  const user = await User.findById(req.user._id)
-
-  if(user){
-    user.name = req.body.name || user.name
-    user.email = req.body.email || user.email
-    if(req.body.password){
-      user.password = req.body.password
-    }
-
-    const updatedUser = await updatedUser.save()
-
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email:updatedUser.email,
-      isAdmin: updatedUser.isAdmin
-    })
-  }else{
-    res.status(404)
-    throw new Error('User not found')
-  }
-};
-
 const register = async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
@@ -328,6 +302,51 @@ const updateAdmin = async (req, res, next) => {
 
 };
 
+//update current user profile data
+const updateUserProfile = async (req, res, next) => {
+  const { name, id, password } = req.params;
+
+  let hashpassword;
+  try {
+    hashpassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new HttpError('נסה שוב', 500);
+    return next(error);
+  }
+
+  try {
+    const user = await User.findOne({_id: id});
+    user.name = user.name;
+    user.password = hashpassword;
+    const UpdateUser = await user.save();
+
+    res.json({
+      name: UpdateUser.name,
+      password: UpdateUser.password,
+    });
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+  try {
+    token = jwt.sign(
+      {
+        name: UpdateUser.name,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+  } catch (err) {
+    const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+  res.status(201).json({
+    name: UpdateUser.name,
+  });
+};
 
 exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
