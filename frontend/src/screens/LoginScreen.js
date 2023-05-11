@@ -50,7 +50,6 @@ const LoginScreen = () => {
         responseData.name,
         responseData.isAdmin
       );
-      console.log(responseData.isAdmin);
       navigate('/');
     } catch (err) {}
   };
