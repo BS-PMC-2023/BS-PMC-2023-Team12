@@ -13,7 +13,6 @@ import { useHttpClient } from '../hooks/httpHook';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import PasswordStrengthBar from 'react-password-strength-bar';
-import { getUserDetails } from '../actions/userActions';
 import { Card } from 'react-bootstrap';
 
 
