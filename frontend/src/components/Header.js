@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Route, Routes } from 'react-router-dom'
-
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
 import SearchBox from './SearchBox'
+import { BrowserRouter as Routes, Route} from 'react-router-dom';
+
 
 
 const Header = () => {
   const auth = useContext(AuthContext);
-
   return (
     <header>
       <Navbar
@@ -29,10 +28,12 @@ const Header = () => {
               />
               
             </Navbar.Brand>
-            
           </LinkContainer>
-          <SearchBox/>
+         
+             <SearchBox />
 
+         
+         
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
