@@ -286,6 +286,7 @@ const deleteUser = async (req, res, next) => {
 
 //ipdate the admin rights to the user in the database
 const updateAdmin = async (req, res, next) => {
+
   const { id } = req.params;
   
   try {
@@ -304,7 +305,9 @@ const updateAdmin = async (req, res, next) => {
 
 //update current user profile data
 const updateUserProfile = async (req, res, next) => {
-  const { name, id, password } = req.params;
+  console.log("in the function");
+  const { name, _id, password } = req.body;
+  console.log(name,_id,password);
 
   let hashpassword;
   try {
@@ -315,13 +318,18 @@ const updateUserProfile = async (req, res, next) => {
   }
 
   try {
-    const user = await User.findOne({_id: id});
-    user.name = user.name;
+    const user = await User.findOne({ _id: _id });
+    console.log(user.name);
+    user.name = name;
+    console.log(user.name);
     user.password = hashpassword;
+    
     const UpdateUser = await user.save();
+    
 
     res.json({
       name: UpdateUser.name,
+      _id: UpdateUser._id,
       password: UpdateUser.password,
     });
   } catch (err) {
@@ -343,9 +351,6 @@ const updateUserProfile = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({
-    name: UpdateUser.name,
-  });
 };
 
 exports.getUsers = getUsers;

@@ -11,13 +11,10 @@ router.post('/login', usersController.login);
 router.post('/forgot-password', usersController.forogotPassword);
 router.get('/reset-password/:id/:token', usersController.resetPassword);
 router.post('/reset-password/:id/:token', usersController.changePassword);
-<<<<<<< HEAD
-router.get('/personalZone/:id', usersController.updateUserProfile);
-=======
-router
-  .get('/personalZone', usersController.updateUserProfile)
-  .put(usersController.updateUserProfile);
->>>>>>> 70e2e524fba843ae30120ee92fdc858d729450fe
+// router
+//   .get('/personalZone', usersController.updateUserProfile)
+//   .put(usersController.updateUserProfile);
+router.put('/personalZone', usersController.updateUserProfile);
 router.put('/updateAdmin/:id', usersController.updateAdmin);
 
 module.exports = router;
