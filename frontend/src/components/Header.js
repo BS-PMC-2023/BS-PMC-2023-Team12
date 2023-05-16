@@ -2,9 +2,16 @@ import React, { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    auth.logout();
+    navigate('/');
+  };
 
   return (
     <header>
@@ -50,11 +57,9 @@ const Header = () => {
                   <LinkContainer to="/admin/updatesproducts">
                     <NavDropdown.Item>מחסן</NavDropdown.Item>
                   </LinkContainer>
-                  <LinkContainer to="/">
-                    <NavDropdown.Item onClick={auth.logout}>
-                      התנתק
-                    </NavDropdown.Item>
-                  </LinkContainer>
+                  <NavDropdown.Item onClick={handleLogout}>
+                    התנתק
+                  </NavDropdown.Item>
                 </NavDropdown>
               )}
               {auth.isLoggedIn && !auth.isAdmin && (
@@ -62,7 +67,7 @@ const Header = () => {
                   <LinkContainer to="/PersonalZone">
                     <NavDropdown.Item>אזור אישי</NavDropdown.Item>
                   </LinkContainer>
-                  <NavDropdown.Item onClick={auth.logout}>
+                  <NavDropdown.Item onClick={handleLogout}>
                     התנתק
                   </NavDropdown.Item>
                 </NavDropdown>
