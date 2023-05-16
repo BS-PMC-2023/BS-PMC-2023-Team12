@@ -16,7 +16,7 @@ import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
 
 const App = () => {
-  const { token, login, logout, userId, userName, isAdmin } = useAuth();
+  const { token, login, logout, userId, userName, isAdmin, email } = useAuth();
 
   return (
     <AuthContext.Provider
@@ -26,6 +26,7 @@ const App = () => {
         userId: userId,
         userName: userName,
         isAdmin: isAdmin,
+        email: email,
         login: login,
         logout: logout,
       }}

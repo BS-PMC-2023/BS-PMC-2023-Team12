@@ -1,73 +1,166 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
-
+import { Form, Button, FormGroup, FormLabel } from 'react-bootstrap';
+import FormContainer from '../FormContainer';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import Message from '../Message';
+import { useHttpClient } from '../../hooks/httpHook';
+import { AuthContext } from '../../context/AuthContext';
 
 const ProductsLst = (props) => {
-  const [data, setData] = useState([]);
+  const auth = useContext(AuthContext);
+  const { error, sendRequest } = useHttpClient();
 
+  const [data, setData] = useState([]);
+  const [borrowingItemId, setBorrowingItemId] = useState(null);
+
+  let [borrowDate, setBorrowDate] = useState(new Date());
+  let [returnDate, setRetunrDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get('http://localhost:5000/'+props.myProp);
+      const result = await axios.get(`http://localhost:5000/${props.myProp}`);
       setData(result.data);
     };
     fetchData();
   }, [props.myProp]);
 
+  const handleBorrowButtonClick = (id) => {
+    setBorrowingItemId(id);
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+
+    const borrow = borrowDate;
+    const fyyyy = borrow.getFullYear();
+    let fmm = borrow.getMonth() + 1;
+    let fdd = borrow.getDate();
+
+    if (fdd < 10) fdd = '0' + fdd;
+    if (fmm < 10) fmm = '0' + fmm;
+
+    const formattedBorrow = fdd + '/' + fmm + '/' + fyyyy;
+    borrowDate = formattedBorrow;
+
+    const returndate = returnDate;
+    const ryyyy = returndate.getFullYear();
+    let rmm = returndate.getMonth() + 1;
+    let rdd = returndate.getDate();
+
+    if (rdd < 10) rdd = '0' + rdd;
+    if (rmm < 10) rmm = '0' + rmm;
+
+    const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
+    returnDate = formattedReturnDate;
+    try {
+      await sendRequest(
+        'http://localhost:5000/borrow/addborrow',
+        'POST',
+        JSON.stringify({
+          user: auth.userId,
+          name: auth.userName,
+          borrowDate: formattedBorrow,
+          returnDate: formattedReturnDate,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    alert('השאלת הציוד בוצע בהצלחה');
+  };
 
   return (
     <div>
       <h1>{props.name} List</h1>
-        {data.map((item) => (
-          //<li key={item.id}>{item.name}</li>
-          <ListGroup as="ol"  key={item._id}>
-            <ListGroup.Item
-              as="li"
-              //className="d-flex justify-content-between align-items-start"
-            >
-              <div className="ms-2 me-auto">
-                <div className="fw-bold">{item.name}</div>
-                {item.id}<br/>
-                {item.available == true ? (
-                  <div
-                  className="d-flex justify-content-between align-items-start"
+      {error && <Message variant="danger">{error}</Message>}
+
+      {data.map((item) => (
+        <ListGroup as="ol" key={item._id}>
+          <ListGroup.Item as="li">
+            <div className="ms-2 me-auto">
+              <div className="fw-bold">{item.name}</div>
+              {item.id}
+              <br />
+              {item.available ? (
+                <div className="d-flex justify-content-between align-items-start">
+                  <Badge bg="primary" pill style={{ fontSize: 15 }}>
+                    פנוי
+                  </Badge>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => handleBorrowButtonClick(item._id)}
                   >
-                    <Badge bg="primary" pill>
-                      פנוי
-                    </Badge> 
-                    <button type="button" class="btn btn-primary">השאל</button>
-                  </div>
+                    השאל
+                  </button>
+                </div>
               ) : (
-                  <div 
-                  className="d-flex justify-content-between align-items-start"
-                  >
-                    <Badge bg="primary" pill>
-                      תפוס
-                    </Badge>
-                    <div>
-                      student id: {item.studentID}
+                <div className="d-flex justify-content-between align-items-start">
+                  <Badge bg="danger" pill style={{ fontSize: 15 }}>
+                    תפוס
+                  </Badge>
+                  <div>student id: {item.studentID}</div>
+                </div>
+              )}
+            </div>
+
+            {borrowingItemId === item._id && (
+              <React.Fragment>
+                <FormContainer>
+                  <Form onSubmit={submitHandler}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <div className="d-grid gap-3">
+                        <Button
+                          type="submit"
+                          variant="primary"
+                          disabled={!returnDate || !borrowDate}
+                        >
+                          שריין
+                        </Button>
+                      </div>
+                      <FormGroup
+                        controlId="returnDate"
+                        style={{ marginLeft: '30px' }}
+                      >
+                        <FormLabel className="d-flex justify-content-center">
+                          <strong>:תאריך החזרה</strong>
+                        </FormLabel>
+                        <DatePicker
+                          selected={returnDate}
+                          onChange={(date) => setRetunrDate(date)}
+                          dateFormat="dd/MM/yyyy"
+                          minDate={new Date()}
+                        />
+                      </FormGroup>
+                      <FormGroup
+                        controlId="startDate"
+                        style={{ marginLeft: '30px' }}
+                      >
+                        <FormLabel className="d-flex justify-content-center">
+                          <strong>:תאריך השאלה</strong>
+                        </FormLabel>
+                        <DatePicker
+                          selected={borrowDate}
+                          onChange={(date) => setBorrowDate(date)}
+                          dateFormat="dd/MM/yyyy"
+                          minDate={new Date()}
+                        />
+                      </FormGroup>
                     </div>
-                  </div>
-                )}
-              </div>
-              
-              {/* {item.available == true ? (
-                <Badge bg="primary" pill>
-                  available
-                </Badge> 
-              ) : (
-                  <div>
-                    student id: {item.studentID}
-                    <Badge bg="primary" pill>
-                    unavailable
-                    </Badge>
-                  </div>
-                )} */}
-            </ListGroup.Item>
-          </ListGroup>
-        ))}
+                  </Form>
+                </FormContainer>
+              </React.Fragment>
+            )}
+          </ListGroup.Item>
+        </ListGroup>
+      ))}
     </div>
   );
 };
