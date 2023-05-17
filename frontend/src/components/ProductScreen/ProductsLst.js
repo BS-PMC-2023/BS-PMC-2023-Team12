@@ -16,9 +16,11 @@ const ProductsLst = (props) => {
 
   const [data, setData] = useState([]);
   const [borrowingItemId, setBorrowingItemId] = useState(null);
-
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState(null);
+
+  // eslint-disable-next-line
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,7 +31,13 @@ const ProductsLst = (props) => {
   }, [props.myProp]);
 
   const handleBorrowButtonClick = (id) => {
-    setBorrowingItemId(id);
+    if (id === borrowingItemId) {
+      setBorrowingItemId(null);
+      setShowForm(false);
+    } else {
+      setBorrowingItemId(id);
+      setShowForm(true);
+    }
   };
 
   const submitHandler = async (e) => {
@@ -61,8 +69,10 @@ const ProductsLst = (props) => {
         'http://localhost:5000/borrow/addborrow',
         'POST',
         JSON.stringify({
-          user: auth.userId,
+          userID: auth.userId,
+          equipmentID: borrowingItemId,
           name: auth.userName,
+          email: auth.email,
           borrowDate: formattedBorrow,
           returnDate: formattedReturnDate,
         }),
@@ -96,7 +106,7 @@ const ProductsLst = (props) => {
                   <button
                     type="button"
                     className="btn btn-primary"
-                    onClick={() => handleBorrowButtonClick(item._id)}
+                    onClick={() => handleBorrowButtonClick(item.id)}
                   >
                     השאל
                   </button>
@@ -106,12 +116,12 @@ const ProductsLst = (props) => {
                   <Badge bg="danger" pill style={{ fontSize: 15 }}>
                     תפוס
                   </Badge>
-                  <div>student id: {item.studentID}</div>
+                  <div>Student Id: {item.studentID}</div>
                 </div>
               )}
             </div>
 
-            {borrowingItemId === item._id && (
+            {borrowingItemId === item.id && (
               <React.Fragment>
                 <FormContainer>
                   <Form onSubmit={submitHandler}>
