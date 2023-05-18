@@ -216,3 +216,9 @@ thead {
 tbody {
   font-size: 16px;
 }
+
+.confirm-return-button:hover {
+  background-color: #678773 !important;
+  color: #fff !important;
+  border-color: #678773 !important;
+}
