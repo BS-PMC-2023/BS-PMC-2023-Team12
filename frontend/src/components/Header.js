@@ -54,6 +54,9 @@ const Header = () => {
                   <LinkContainer to="/admin/userslist">
                     <NavDropdown.Item>משתמשים</NavDropdown.Item>
                   </LinkContainer>
+                  <LinkContainer to="/admin/tracking">
+                    <NavDropdown.Item>מעקב ציוד</NavDropdown.Item>
+                  </LinkContainer>
                   <LinkContainer to="/admin/updatesproducts">
                     <NavDropdown.Item>מחסן</NavDropdown.Item>
                   </LinkContainer>
