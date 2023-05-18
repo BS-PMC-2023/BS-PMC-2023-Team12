@@ -1,112 +1,173 @@
-import React, { useContext, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Form, Button, Row, Col } from 'react-bootstrap';
-import Input from '../components/FormElements/Input';
-import { useForm } from '../hooks/FormHook';
+import React, { useEffect, useContext, useState } from 'react';
 import {
-  VALIDATOR_EMAIL,
-  VALIDATOR_MINLENGTH,
-  VALIDATOR_REQUIRE,
-} from '../util/validators';
-import { AuthContext } from '../context/AuthContext';
+  Form,
+  Button,
+  FormGroup,
+  FormLabel,
+  FormControl,
+} from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
+import { AuthContext } from '../context/AuthContext';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import PasswordStrengthBar from 'react-password-strength-bar';
-import { Card } from 'react-bootstrap';
+import { Table, Row, Col } from 'react-bootstrap';
 
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
 
-const PersonalZoneScreen = () => {
+const PersonalZone = () => {
   const auth = useContext(AuthContext);
+
   const { isLoading, error, sendRequest } = useHttpClient();
 
-  const navigate = useNavigate();
+  const [name, setName] = useState(auth.userName);
+  const [password, setPassword] = useState('');
+  const [selectedNavItem, setSelectedNavItem] = useState('home'); // define selectedNavItem state and set its initial value to 'home'
 
-  const word = ['חלש', 'חלש', 'בסדר', 'טוב', 'חזק'];
+  const [loadedUsers, setLoadedUsers] = useState();
 
-  const [formState, inputHandler] = useForm(
-    {
-      email: {
-        value: '',
-        isValid: false,
-      },
-      password: {
-        value: '',
-        isValid: false,
-      },
-    },
-    false
-  );
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const responseData = await sendRequest(
+          'http://localhost:5000/api/users'
+        );
+        setLoadedUsers(responseData.users);
+      } catch (err) {}
+    };
+    fetchUsers();
+  }, [sendRequest]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
+    console.log(name, auth.userId, password);
     try {
-      const responseData = await sendRequest(
-        'http://localhost:5000/api/users/personalZone',
-        'POST',
+      await sendRequest(
+        'http://localhost:5000/api/users/personalZone/',
+        'PUT',
         JSON.stringify({
-          name: formState.inputs.name.value,
-          password: formState.inputs.password.value,
+          name: name,
+          _id: auth.userId,
+          password: password,
         }),
         {
           'Content-Type': 'application/json',
         }
       );
-      window.location.reload();
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const renderSelectedNavItemContent = () => {
+    switch (selectedNavItem) {
+      case 'current':
+        return (
+          <tbody>
+            {loadedUsers
+              ?.filter((user) => user._id == auth.userId)
+              ?.map((user) => (
+                <tr key={user._id}>
+                  <td>{user.name}</td>
+                  <td>
+                    <a href={`mailto:${user.email}`}>{user.email}</a>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        );
+      case 'history':
+        return (
+          <div>
+            <h1>תוכן 2</h1>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
     <>
-      <h1> </h1>
-      <Card>
-        <hr className="hr-line-right"></hr>
-        <h1>פרטים אישיים</h1>
-        <hr className="hr-line-left"></hr>
-        {error && <Message variant="danger">{error}</Message>}
-        <Form onSubmit={submitHandler}>
-          <Input
-            element="textarea"
-            id="name"
-            type="name"
-            label="שם מלא:"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText="נא להזין שם."
-            onInput={inputHandler}
-          />
-          
-          <Input
-            element="input"
-            id="password"
-            type="password"
-            label="סיסמה:"
-            validators={[VALIDATOR_MINLENGTH(6)]}
-            errorText="נא להזין סיסמה חוקית, לפחות 6 תווים."
-            onInput={inputHandler}
-            value = {auth.password}
-          />
-          {formState.inputs.password.value.length >= 1 && (
-            <PasswordStrengthBar
-              shortScoreWord="קצר מדי"
-              scoreWords={word}
-              password={formState.inputs.password.value}
-            />
-          )}
-          <h2> </h2>
-          <div className="d-grid gap-3">
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={!formState.isValid}
-            >
-              {isLoading ? <Loader variant="light" /> : <string>עדכן פרטים</string>}
-            </Button>
-          </div>
-        </Form>
-      </Card>
+      <hr className="hr-line-right"></hr>
+      <h1>אזור אישי</h1>
+      <hr className="hr-line-left"></hr>
+
+      <Table>
+        <tbody>
+          <tr>
+            <td style={{ verticalAlign: 'top', width: '20%' }}>
+              <Form
+                onSubmit={submitHandler}
+                className="text-end"
+                style={{ direction: 'rtl' }}
+              >
+                <FormGroup controlId="name">
+                  <FormLabel>
+                    <strong>שם מלא:</strong>
+                  </FormLabel>
+                  <FormControl
+                    style={{ direction: 'rtl' }}
+                    type="name"
+                    placeholder={name}
+                    value={name}
+                    defaultValue={name}
+                    onChange={(e) => setName(e.target.value)}
+                  ></FormControl>
+                </FormGroup>
+                <h5> </h5>
+                <FormGroup>
+                  <FormLabel>
+                    <strong>סיסמה:</strong>
+                  </FormLabel>
+                  <FormControl
+                    style={{ direction: 'rtl' }}
+                    type="password"
+                    placeholder="הזן סיסמה"
+                    value={password}
+                    defaultValue={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  ></FormControl>
+                </FormGroup>
+                <h5> </h5>
+                <div className="d-grid gap-3">
+                  <Button type="submit" variant="primary">
+                    {isLoading ? (
+                      <Loader variant="light" />
+                    ) : (
+                      <string>עדכן</string>
+                    )}
+                  </Button>
+                </div>
+              </Form>
+            </td>
+            <td style={{ verticalAlign: 'top', width: '80%' }}>
+              <div style={{ paddingLeft: '50px' }}>
+                <Row>
+                  <Navbar bg="primary" variant="dark">
+                    <Container>
+                      <Nav className="me-auto">
+                        <Nav.Link onClick={() => setSelectedNavItem('current')}>
+                          השאלות פעילות
+                        </Nav.Link>
+                        <Nav.Link onClick={() => setSelectedNavItem('history')}>
+                          היסטוריית השאלות
+                        </Nav.Link>
+                      </Nav>
+                    </Container>
+                  </Navbar>
+                </Row>
+                <Row>
+                  <Col>{renderSelectedNavItemContent()}</Col>
+                </Row>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </Table>
     </>
   );
 };
 
-export default PersonalZoneScreen;
+export default PersonalZone;
