@@ -43,25 +43,6 @@ h3 {
   box-shadow: 0 1px 8px #2d332f;
 }
 
-.card2 {
-  margin: 0 auto;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
-  border-radius: 6px;
-  padding: 1rem;
-  overflow: hidden;
-  background: rgb(255, 255, 255);
-  width: 50%;
-  float: left;
-}
-
-.card2-img-top {
-  border-radius: 10px;
-}
-
-.card2:hover {
-  box-shadow: 0 1px 8px #2d332f;
-}
-
 .card_prod {
   margin: 0 auto;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.26);
@@ -183,4 +164,55 @@ div.dropdown-menu.show {
 a.dropdown-item:hover {
   color: #ffffff;
   background-color: #c8dacf;
+}
+
+.table-custom {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  font-size: 16px;
+  margin: 20px 0;
+  width: 100%;
+}
+
+.table-custom thead th {
+  background-color: #81a890;
+  border: 1px solid #ccc;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.table-custom tbody td {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  color: #333;
+  padding: 10px;
+}
+
+.table-custom tbody tr:nth-child(even) td {
+  background-color: #fff;
+}
+
+.table-custom tbody tr:hover td {
+  background-color: #d4f1e4;
+}
+
+.table-custom .btn-primary {
+  background-color: #81a890;
+  border: none;
+}
+
+.table-custom .btn-primary:hover {
+  background-color: #81a890;
+  border: none;
+}
+
+thead {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+tbody {
+  font-size: 16px;
 }
