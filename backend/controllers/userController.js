@@ -36,32 +36,6 @@ const getUserProfile = async (req, res, next) =>{
   }
 };
 
-//update current user profile data
-const updateUserProfile = async (req, res, next) =>{
-
-  const user = await User.findById(req.user._id)
-
-  if(user){
-    user.name = req.body.name || user.name
-    user.email = req.body.email || user.email
-    if(req.body.password){
-      user.password = req.body.password
-    }
-
-    const updatedUser = await updatedUser.save()
-
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email:updatedUser.email,
-      isAdmin: updatedUser.isAdmin
-    })
-  }else{
-    res.status(404)
-    throw new Error('User not found')
-  }
-};
-
 const register = async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
@@ -312,6 +286,7 @@ const deleteUser = async (req, res, next) => {
 
 //ipdate the admin rights to the user in the database
 const updateAdmin = async (req, res, next) => {
+
   const { id } = req.params;
   
   try {
@@ -328,6 +303,55 @@ const updateAdmin = async (req, res, next) => {
 
 };
 
+//update current user profile data
+const updateUserProfile = async (req, res, next) => {
+  console.log("in the function");
+  const { name, _id, password } = req.body;
+  console.log(name,_id,password);
+
+  let hashpassword;
+  try {
+    hashpassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new HttpError('נסה שוב', 500);
+    return next(error);
+  }
+
+  try {
+    const user = await User.findOne({ _id: _id });
+    console.log(user.name);
+    user.name = name;
+    console.log(user.name);
+    user.password = hashpassword;
+    
+    const UpdateUser = await user.save();
+    
+
+    res.json({
+      name: UpdateUser.name,
+      _id: UpdateUser._id,
+      password: UpdateUser.password,
+    });
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+  try {
+    token = jwt.sign(
+      {
+        name: UpdateUser.name,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+  } catch (err) {
+    const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+};
 
 exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;

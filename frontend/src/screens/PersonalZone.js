@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Form,
   Button,
@@ -25,20 +25,6 @@ const PersonalZone = () => {
   const [password, setPassword] = useState('');
   const [selectedNavItem, setSelectedNavItem] = useState('home'); // define selectedNavItem state and set its initial value to 'home'
 
-  const [loadedUsers, setLoadedUsers] = useState();
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const responseData = await sendRequest(
-          'http://localhost:5000/api/users'
-        );
-        setLoadedUsers(responseData.users);
-      } catch (err) {}
-    };
-    fetchUsers();
-  }, [sendRequest]);
-
   const submitHandler = async (e) => {
     e.preventDefault();
     console.log(name, auth.userId, password);
@@ -62,22 +48,13 @@ const PersonalZone = () => {
 
   const renderSelectedNavItemContent = () => {
     switch (selectedNavItem) {
-      case 'current':
+      case 'home':
         return (
-          <tbody>
-            {loadedUsers
-              ?.filter((user) => user._id == auth.userId)
-              ?.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.name}</td>
-                  <td>
-                    <a href={`mailto:${user.email}`}>{user.email}</a>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
+          <div>
+            <h1>תוכן 1</h1>
+          </div>
         );
-      case 'history':
+      case 'features':
         return (
           <div>
             <h1>תוכן 2</h1>
@@ -90,9 +67,10 @@ const PersonalZone = () => {
 
   return (
     <>
-      <hr className="hr-line-right"></hr>
+      <hr></hr>
       <h1>אזור אישי</h1>
-      <hr className="hr-line-left"></hr>
+      <hr></hr>
+      {error && <Message variant="danger">{error}</Message>}
 
       <Table>
         <tbody>
@@ -142,16 +120,18 @@ const PersonalZone = () => {
                 </div>
               </Form>
             </td>
-            <td style={{ verticalAlign: 'top', width: '80%' }}>
+            <td style={{ width: '80%' }}>
               <div style={{ paddingLeft: '50px' }}>
                 <Row>
                   <Navbar bg="primary" variant="dark">
                     <Container>
                       <Nav className="me-auto">
-                        <Nav.Link onClick={() => setSelectedNavItem('current')}>
+                        <Nav.Link onClick={() => setSelectedNavItem('home')}>
                           השאלות פעילות
                         </Nav.Link>
-                        <Nav.Link onClick={() => setSelectedNavItem('history')}>
+                        <Nav.Link
+                          onClick={() => setSelectedNavItem('features')}
+                        >
                           היסטוריית השאלות
                         </Nav.Link>
                       </Nav>
