@@ -48,9 +48,6 @@ const Header = () => {
 
               {auth.isLoggedIn && auth.isAdmin && (
                 <NavDropdown title="נהל">
-                  <LinkContainer to="/admin/profile">
-                    <NavDropdown.Item>פרופיל</NavDropdown.Item>
-                  </LinkContainer>
                   <LinkContainer to="/admin/userslist">
                     <NavDropdown.Item>משתמשים</NavDropdown.Item>
                   </LinkContainer>
