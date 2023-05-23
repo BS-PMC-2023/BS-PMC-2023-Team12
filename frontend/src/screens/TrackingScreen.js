@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
 import Loader from '../components/Loader';
 
@@ -16,6 +16,14 @@ const TrackingScreen = () => {
     };
     fetchBorrows();
   }, [sendRequest]);
+
+  const [sortState, setSortState] = useState('none');
+  const sortMethods = {
+    none: { method: (a, b) => null },
+    BorrowDate: { method: (a, b) => (a.borrowDate < b.borrowDate ? -1 : 1) },
+    ReturnDate: { method: (a, b) => (a.returnDate < b.returnDate ? -1 : 1) },
+    EquipmentID: { method: (a, b) => (a.equipmentID < b.equipmentID ? -1 : 1) },
+  };
 
   const updateAvalibale = async (borrow) => {
     try {
@@ -37,12 +45,40 @@ const TrackingScreen = () => {
       console.log(err);
     }
   };
-
   return (
     <>
       <hr className="hr-line-right"></hr>
       <h1>רשימת השאלות</h1>
       <hr className="hr-line-left"></hr>
+      <Col>
+        <ListGroup variant="flush">
+          <ListGroupItem
+            style={{ display: 'flex', justifyContent: 'flex-end' }}
+          >
+            <select
+              style={{
+                direction: 'rtl',
+                padding: '0.5rem',
+                border: '1px solid #678773',
+                borderRadius: '4px',
+                backgroundColor: '#fff',
+                color: '#333',
+                fontSize: '1rem',
+                minwidth: '100px',
+              }}
+              onChange={(e) => setSortState(e.target.value)}
+            >
+              <option value="" disabled selected>
+                מיין לפי
+              </option>
+              <option value="BorrowDate">תאריך השאלה</option>
+              <option value="ReturnDate">תאריך החזרה</option>
+              <option value="EquipmentID">מספר מק"ט</option>
+            </select>
+          </ListGroupItem>
+        </ListGroup>
+      </Col>
+
       {isLoading ? (
         <Loader />
       ) : (
@@ -65,6 +101,7 @@ const TrackingScreen = () => {
           </thead>
           <tbody>
             {loadedBorrows
+              ?.sort(sortMethods[sortState].method)
               ?.filter((borrow) => !borrow.isAvailable)
               ?.map((borrow) => (
                 <tr key={borrow._id}>
