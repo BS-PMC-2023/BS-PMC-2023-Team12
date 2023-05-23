@@ -1,6 +1,4 @@
-
 import React, { useEffect, useState } from 'react';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Table, Button, Form } from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
 import Loader from '../components/Loader';
@@ -44,7 +42,7 @@ const UserListScreen = () => {
         `http://localhost:5000/api/users/updateAdmin/${user._id}`,
         'PUT',
         JSON.stringify({
-          isAdmin: !user.isAdmin
+          isAdmin: !user.isAdmin,
         }),
         {
           'Content-Type': 'application/json',
@@ -55,7 +53,6 @@ const UserListScreen = () => {
       console.log(err);
     }
   };
-  
 
   return (
     <>
@@ -87,14 +84,10 @@ const UserListScreen = () => {
                   />
                 </td>
                 <td>
-                  <LinkContainer to={`/admin/user/${user._id}/edit`}>
-                    <Button variant="light" className="btn-sm">
-                      <i className="fas fa-edit"></i>
-                    </Button>
-                  </LinkContainer>
                   <Button
                     variant="danger"
                     className="btn-sm"
+                    disabled={user.isAdmin}
                     onClick={() => delete_user(user)}
                   >
                     <i className="fas fa-trash"></i>
