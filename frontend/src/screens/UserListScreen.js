@@ -63,6 +63,7 @@ const UserListScreen = () => {
         <Table striped bordered hover responsive className="table-sm">
           <thead>
             <tr>
+              <th>ת"ז</th>
               <th>שם</th>
               <th>אימייל</th>
               <th>הרשאות מנהל</th>
@@ -72,6 +73,7 @@ const UserListScreen = () => {
           <tbody>
             {loadedUsers?.map((user) => (
               <tr key={user._id}>
+                <td>{user._id}</td>
                 <td>{user.name}</td>
                 <td>
                   <a href={`mailto:${user.email}`}>{user.email}</a>
