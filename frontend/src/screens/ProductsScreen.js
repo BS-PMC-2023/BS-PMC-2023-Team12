@@ -5,6 +5,7 @@ import { Form } from 'react-bootstrap';
 
 const products = [
   {
+    
     img: "camera.jpg",
     header: "Camera",
     p: "ציוד צילום",
