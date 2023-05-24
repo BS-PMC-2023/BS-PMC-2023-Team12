@@ -30,7 +30,6 @@ const Header = () => {
             </Navbar.Brand>
           </LinkContainer>
          
-             <SearchBox />
 
          
          
