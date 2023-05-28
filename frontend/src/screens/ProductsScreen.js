@@ -9,6 +9,7 @@ const products = [
     img: "camera.jpg",
     header: "Camera",
     p: "ציוד צילום",
+    a:"צפה בזמינות",
     href: "./CamerasScreen"
   },
   {
