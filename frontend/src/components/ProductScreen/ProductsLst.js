@@ -15,7 +15,7 @@ const ProductsLst = (props) => {
   const { error, sendRequest } = useHttpClient();
 
   const [data, setData] = useState([]);
-  const [borrowingItemId, setBorrowingItemId] = useState();
+  const [borrowingItemId, setBorrowingItemId] = useState('');
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState();
 
