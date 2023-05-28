@@ -58,7 +58,8 @@ const RegisterScreen = () => {
         responseData.userId,
         responseData.token,
         responseData.name,
-        responseData.isAdmin
+        responseData.isAdmin,
+        responseData.email
       );
       navigate('/');
     } catch (err) {}

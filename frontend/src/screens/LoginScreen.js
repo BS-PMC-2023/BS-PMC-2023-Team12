@@ -48,9 +48,9 @@ const LoginScreen = () => {
         responseData.userId,
         responseData.token,
         responseData.name,
-        responseData.isAdmin
+        responseData.isAdmin,
+        responseData.email
       );
-      console.log(responseData.isAdmin);
       navigate('/');
     } catch (err) {}
   };

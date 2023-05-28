@@ -18,6 +18,24 @@ const getUsers = async (req, res, next) => {
   res.json({ users: users.map((user) => user.toObject({ getters: true })) });
 };
 
+//get current user profile data
+const getUserProfile = async (req, res, next) =>{
+
+  const user = await User.findById(req.user._id)
+
+  if(user){
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    })
+  }else{
+    res.status(404)
+    throw new Error('User not found')
+  }
+};
+
 const register = async (req, res, next) => {
   const { name, email, password, role } = req.body;
 
@@ -266,6 +284,75 @@ const deleteUser = async (req, res, next) => {
   res.status(200).json({ message: 'Deleted user.' });
 };
 
+//ipdate the admin rights to the user in the database
+const updateAdmin = async (req, res, next) => {
+
+  const { id } = req.params;
+  
+  try {
+    const user = await User.findOne({_id: id});
+    user.isAdmin = !user.isAdmin;
+    const UpdateUser = await user.save();
+  
+    res.json({
+      isAdmin: UpdateUser.isAdmin,
+    });  
+  } catch (err) {
+    return next(err);
+  }
+
+};
+
+//update current user profile data
+const updateUserProfile = async (req, res, next) => {
+  console.log("in the function");
+  const { name, _id, password } = req.body;
+  console.log(name,_id,password);
+
+  let hashpassword;
+  try {
+    hashpassword = await bcrypt.hash(password, 12);
+  } catch (err) {
+    const error = new HttpError('נסה שוב', 500);
+    return next(error);
+  }
+
+  try {
+    const user = await User.findOne({ _id: _id });
+    console.log(user.name);
+    user.name = name;
+    console.log(user.name);
+    user.password = hashpassword;
+    
+    const UpdateUser = await user.save();
+    
+
+    res.json({
+      name: UpdateUser.name,
+      _id: UpdateUser._id,
+      password: UpdateUser.password,
+    });
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+  try {
+    token = jwt.sign(
+      {
+        name: UpdateUser.name,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+  } catch (err) {
+    const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
+    return next(error);
+  }
+
+};
+
 exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.register = register;
@@ -273,3 +360,5 @@ exports.login = login;
 exports.forogotPassword = forogotPassword;
 exports.resetPassword = resetPassword;
 exports.changePassword = changePassword;
+exports.updateUserProfile = updateUserProfile;
+exports.updateAdmin = updateAdmin;

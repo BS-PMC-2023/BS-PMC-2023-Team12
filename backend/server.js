@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const borrowRoutes = require('./routes/borrowRoutes');
 const cameraR = require('./routes/cameraR');
 const recordingR = require('./routes/recordingR');
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 
 app.use(cors());
 app.use('/api/users', userRoutes);
+app.use('/borrow', borrowRoutes);
 
 app.use((error, req, res, next) => {
   if (res.headerSent) {

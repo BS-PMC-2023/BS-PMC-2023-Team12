@@ -12,12 +12,13 @@ import ProductsScreen from './screens/ProductsScreen';
 import ProductsLst from './components/ProductScreen/ProductsLst';
 import UserListScreen from './screens/UserListScreen';
 import UpdatesProducts from './screens/UpdatesProducts';
+import TrackingScreen from './screens/TrackingScreen';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
 import SearchBox from './components/SearchBox'
 
 const App = () => {
-  const { token, login, logout, userId, userName, isAdmin } = useAuth();
+  const { token, login, logout, userId, userName, isAdmin, email } = useAuth();
 
   return (
     <AuthContext.Provider
@@ -27,6 +28,7 @@ const App = () => {
         userId: userId,
         userName: userName,
         isAdmin: isAdmin,
+        email: email,
         login: login,
         logout: logout,
       }}
@@ -53,6 +55,7 @@ const App = () => {
                 element={<ProductsLst name="Recording" myProp="recording" />}
               />
               <Route path="/admin/userslist" element={<UserListScreen />} />
+              <Route path="/admin/tracking" element={<TrackingScreen />} />
               <Route
                 path="/admin/UpdatesProducts"
                 element={<UpdatesProducts />}

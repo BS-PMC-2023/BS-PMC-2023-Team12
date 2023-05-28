@@ -1,16 +1,18 @@
 import { useState, useCallback, useEffect } from 'react';
 
 export const useAuth = () => {
-  const [token, setToken] = useState(false);
-  const [userId, setUserId] = useState(false);
-  const [userName, setUserName] = useState(false);
+  const [token, setToken] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [isAdmin, setAdmin] = useState(false);
+  const [email, SetEmail] = useState(null);
 
-  const login = useCallback((uid, token, name, admin) => {
+  const login = useCallback((uid, token, name, admin, email) => {
     setToken(token);
     setUserId(uid);
     setUserName(name);
     setAdmin(admin);
+    SetEmail(email);
     localStorage.setItem(
       'userData',
       JSON.stringify({
@@ -18,6 +20,7 @@ export const useAuth = () => {
         token: token,
         name: name,
         admin: admin,
+        email: email,
       })
     );
   }, []);
@@ -26,6 +29,7 @@ export const useAuth = () => {
     setToken(null);
     setUserId(null);
     setUserName(null);
+    SetEmail(null);
     setAdmin(false);
     localStorage.removeItem('userData');
   }, []);
@@ -37,9 +41,10 @@ export const useAuth = () => {
         storedData.userId,
         storedData.token,
         storedData.name,
-        storedData.admin
+        storedData.admin,
+        storedData.email
       );
     }
   }, [login]);
-  return { token, login, logout, userId, userName, isAdmin };
+  return { token, login, logout, userId, userName, isAdmin, email };
 };
