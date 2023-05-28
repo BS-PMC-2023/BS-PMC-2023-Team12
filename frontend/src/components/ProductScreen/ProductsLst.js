@@ -15,12 +15,12 @@ const ProductsLst = (props) => {
   const { error, sendRequest } = useHttpClient();
 
   const [data, setData] = useState([]);
-  const [borrowingItemId, setBorrowingItemId] = useState(null);
+  const [borrowingItemId, setBorrowingItemId] = useState(4476762);
+
   let [borrowDate, setBorrowDate] = useState(new Date());
-  let [returnDate, setRetunrDate] = useState(null);
+  let [returnDate, setRetunrDate] = useState('');
 
   // eslint-disable-next-line
-  const [showForm, setShowForm] = useState(false);
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -32,12 +32,13 @@ const ProductsLst = (props) => {
   }, [props.myProp]);
 
   const handleBorrowButtonClick = (id) => {
+    console.log('this is the id of product ' + id);
+    console.log('this is the id of user ' + borrowingItemId);
+
     if (id === borrowingItemId) {
-      setBorrowingItemId(null);
-      setShowForm(false);
+      setBorrowingItemId(4476762);
     } else {
       setBorrowingItemId(id);
-      setShowForm(true);
     }
   };
 
@@ -193,4 +194,4 @@ const ProductsLst = (props) => {
   }
 };
 
-export default ProductsLst;
+export default ProductsLst;
