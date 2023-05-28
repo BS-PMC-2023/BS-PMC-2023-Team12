@@ -10,6 +10,7 @@ import Message from '../Message';
 import { useHttpClient } from '../../hooks/httpHook';
 import { AuthContext } from '../../context/AuthContext';
 
+
 const ProductsLst = (props) => {
   const auth = useContext(AuthContext);
   const { error, sendRequest } = useHttpClient();
@@ -29,15 +30,20 @@ const ProductsLst = (props) => {
       setData(result.data);
     };
     fetchData();
-  }, [props.myProp]);
+  }, []);
 
   const handleBorrowButtonClick = (id) => {
+
+    console.log("------"+ borrowingItemId);
+      debugger;
+
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
       setShowForm(false);
     } else {
       setBorrowingItemId(id);
       setShowForm(true);
+
     }
   };
 
@@ -65,6 +71,8 @@ const ProductsLst = (props) => {
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
     returnDate = formattedReturnDate;
+
+
     try {
       await sendRequest(
         'http://localhost:5000/borrow/addborrow',
@@ -90,6 +98,7 @@ const ProductsLst = (props) => {
   const filteredData = data.filter((item) =>
     item.name.toLowerCase().includes(keyword.toLowerCase())
   );
+
 
   if (auth.userId != null) {
     return (
