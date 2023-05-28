@@ -20,6 +20,7 @@ const TrackingScreen = () => {
   const [sortState, setSortState] = useState('none');
   const sortMethods = {
     none: { method: (a, b) => null },
+    CreatedAt: { method: (a, b) => (a.createdAt < b.createdAt ? -1 : 1) },
     BorrowDate: { method: (a, b) => (a.borrowDate < b.borrowDate ? -1 : 1) },
     ReturnDate: { method: (a, b) => (a.returnDate < b.returnDate ? -1 : 1) },
     EquipmentID: { method: (a, b) => (a.equipmentID < b.equipmentID ? -1 : 1) },
@@ -68,9 +69,7 @@ const TrackingScreen = () => {
               }}
               onChange={(e) => setSortState(e.target.value)}
             >
-              <option value="" disabled selected>
-                מיין לפי
-              </option>
+              <option value="CreatedAt">מיין לפי</option>
               <option value="BorrowDate">תאריך השאלה</option>
               <option value="ReturnDate">תאריך החזרה</option>
               <option value="EquipmentID">מספר מק"ט</option>
