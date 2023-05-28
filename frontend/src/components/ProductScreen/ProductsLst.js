@@ -15,9 +15,9 @@ const ProductsLst = (props) => {
   const { error, sendRequest } = useHttpClient();
 
   const [data, setData] = useState([]);
-  const [borrowingItemId, setBorrowingItemId] = useState(null);
+  const [borrowingItemId, setBorrowingItemId] = useState();
   let [borrowDate, setBorrowDate] = useState(new Date());
-  let [returnDate, setRetunrDate] = useState(null);
+  let [returnDate, setRetunrDate] = useState();
 
   // eslint-disable-next-line
   const [showForm, setShowForm] = useState(false);
@@ -91,13 +91,12 @@ const ProductsLst = (props) => {
     item.name.toLowerCase().includes(keyword.toLowerCase())
   );
 
-  if(auth.userId != null)
-  {
+  if (auth.userId != null) {
     return (
       <div>
         <h1>{props.name} List</h1>
         {error && <Message variant="danger">{error}</Message>}
-  
+
         <Form>
           <Form.Group controlId="searchForm">
             <Form.Control
@@ -108,7 +107,7 @@ const ProductsLst = (props) => {
             />
           </Form.Group>
         </Form>
-  
+
         {filteredData.map((item) => (
           <ListGroup as="ol" key={item._id}>
             <ListGroup.Item as="li">
@@ -138,7 +137,7 @@ const ProductsLst = (props) => {
                   </div>
                 )}
               </div>
-  
+
               {borrowingItemId === item.id && (
                 <React.Fragment>
                   <FormContainer>
@@ -192,8 +191,6 @@ const ProductsLst = (props) => {
       </div>
     );
   }
-
- 
 };
 
 export default ProductsLst;
