@@ -22,4 +22,29 @@ const addBorrow = async (req, res) => {
   res.status(201).json(createdBorrow);
 };
 
+//get user borrows items
+const getUserBorrows = async (req, res, next) => {
+  try {
+    const { user: reqUser, name, email, isAvailable, userID } = req.body;
+    const userItems = await User.findOne({ userID: userID });
+    if (!userItems) {
+      const error = new HttpError('איו השאלות פעילות', 401);
+      return next(error);
+    } else {
+      res.json({
+        user: reqUser,
+        name,
+        email,
+        isAvailable,
+        userID,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+
+
 exports.addBorrow = addBorrow;
+exports.getUserBorrows = getUserBorrows;

@@ -305,10 +305,7 @@ const updateAdmin = async (req, res, next) => {
 
 //update current user profile data
 const updateUserProfile = async (req, res, next) => {
-  console.log("in the function");
   const { name, _id, password } = req.body;
-  console.log(name,_id,password);
-
   let hashpassword;
   try {
     hashpassword = await bcrypt.hash(password, 12);
@@ -319,9 +316,7 @@ const updateUserProfile = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ _id: _id });
-    console.log(user.name);
     user.name = name;
-    console.log(user.name);
     user.password = hashpassword;
     
     const UpdateUser = await user.save();

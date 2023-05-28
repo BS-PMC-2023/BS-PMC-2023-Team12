@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import {
   Form,
   Button,
   FormGroup,
   FormLabel,
   FormControl,
+  ListGroup,
 } from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
 import { AuthContext } from '../context/AuthContext';
-import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { Table, Row, Col } from 'react-bootstrap';
 
@@ -19,11 +19,28 @@ import Navbar from 'react-bootstrap/Navbar';
 const PersonalZone = () => {
   const auth = useContext(AuthContext);
 
-  const { isLoading, error, sendRequest } = useHttpClient();
+  const { isLoading, sendRequest } = useHttpClient();
 
   const [name, setName] = useState(auth.userName);
   const [password, setPassword] = useState('');
-  const [selectedNavItem, setSelectedNavItem] = useState('home'); // define selectedNavItem state and set its initial value to 'home'
+  const [selectedNavItem, setSelectedNavItem] = useState('home');
+
+  const [loadedData, setLoadedData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await sendRequest('http://localhost:5000/borrow/getUserBorrows', 'GET', null, {
+          'Content-Type': 'application/json',
+        });
+        const { user, name, email, isAvailable, userID } = response.data;
+        setLoadedData({ user, name, email, isAvailable, userID });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, [sendRequest]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -43,19 +60,41 @@ const PersonalZone = () => {
       );
     } catch (err) {
       console.log(err);
-
+    }
+    try {
+      const response = await sendRequest(
+        'http://localhost:5000/borrow/getUserBorrows',
+        'GET',
+        null,
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+      const { user, name, email, isAvailable, userID } = response.data;
+      setLoadedData({ user, name, email, isAvailable, userID });
+      console.log(email);
+    } catch (err) {
+      console.log(err);
     }
   };
 
   const renderSelectedNavItemContent = () => {
     switch (selectedNavItem) {
-      case 'home':
+      case 'current':
         return (
           <div>
-            <h1>תוכן 1</h1>
+            <ListGroup as="ol">
+              <ListGroup.Item as="li">
+                <div className="ms-2 me-auto">
+                  <div className="fw-bold">{loadedData.name}</div>
+                  {loadedData.email}
+                  <br />
+                </div>
+              </ListGroup.Item>
+            </ListGroup>
           </div>
         );
-      case 'features':
+      case 'history':
         return (
           <div>
             <h1>תוכן 2</h1>
@@ -68,22 +107,21 @@ const PersonalZone = () => {
 
   return (
     <>
-      <hr></hr>
+      <hr className="hr-line-right"></hr>
       <h1>אזור אישי</h1>
-      <hr></hr>
-      {error && <Message variant="danger">{error}</Message>}
+      <hr className="hr-line-left"></hr>
 
       <Table>
         <tbody>
           <tr>
             <td style={{ verticalAlign: 'top', width: '20%' }}>
-              <Form onSubmit={submitHandler} className="text-end" style={{ direction: "rtl" }}>
+              <Form onSubmit={submitHandler} className="text-end" style={{ direction: 'rtl' }}>
                 <FormGroup controlId="name">
                   <FormLabel>
                     <strong>שם מלא:</strong>
                   </FormLabel>
                   <FormControl
-                    style={{ direction: "rtl" }}
+                    style={{ direction: 'rtl' }}
                     type="name"
                     placeholder={name}
                     value={name}
@@ -97,7 +135,7 @@ const PersonalZone = () => {
                     <strong>סיסמה:</strong>
                   </FormLabel>
                   <FormControl
-                    style={{ direction: "rtl" }}
+                    style={{ direction: 'rtl' }}
                     type="password"
                     placeholder="הזן סיסמה"
                     value={password}
@@ -113,30 +151,30 @@ const PersonalZone = () => {
                 </div>
               </Form>
             </td>
-            <td style={{ width: '80%' }}>
-              <div style={{ paddingLeft: "50px" }}>
+            <td style={{ verticalAlign: 'top', width: '80%' }}>
+              <div style={{ paddingLeft: '50px' }}>
                 <Row>
                   <Navbar bg="primary" variant="dark">
                     <Container>
                       <Nav className="me-auto">
-                        <Nav.Link  onClick={() => setSelectedNavItem('home')}>השאלות פעילות</Nav.Link>
-                        <Nav.Link onClick={() => setSelectedNavItem('features')}>היסטוריית השאלות</Nav.Link>
+                        <Nav.Link onClick={() => setSelectedNavItem('current')}>
+                          השאלות פעילות
+                        </Nav.Link>
+                        <Nav.Link onClick={() => setSelectedNavItem('history')}>
+                          היסטוריית השאלות
+                        </Nav.Link>
                       </Nav>
                     </Container>
                   </Navbar>
                 </Row>
                 <Row>
-                  <Col>
-                    {renderSelectedNavItemContent()}
-                  </Col>
+                  <Col>{renderSelectedNavItemContent()}</Col>
                 </Row>
               </div>
             </td>
           </tr>
         </tbody>
       </Table>
-
-
     </>
   );
 };
