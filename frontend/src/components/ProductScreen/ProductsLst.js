@@ -16,11 +16,11 @@ const ProductsLst = (props) => {
 
   const [data, setData] = useState([]);
   const [borrowingItemId, setBorrowingItemId] = useState(null);
+
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState(null);
 
   // eslint-disable-next-line
-  const [showForm, setShowForm] = useState(false);
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -34,10 +34,8 @@ const ProductsLst = (props) => {
   const handleBorrowButtonClick = (id) => {
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
-      setShowForm(false);
     } else {
       setBorrowingItemId(id);
-      setShowForm(true);
     }
   };
 
