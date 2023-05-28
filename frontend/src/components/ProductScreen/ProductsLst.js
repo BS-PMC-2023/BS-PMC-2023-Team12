@@ -15,9 +15,9 @@ const ProductsLst = (props) => {
   const { error, sendRequest } = useHttpClient();
 
   const [data, setData] = useState([]);
-  const [borrowingItemId, setBorrowingItemId] = useState('');
+  const [borrowingItemId, setBorrowingItemId] = useState(null);
   let [borrowDate, setBorrowDate] = useState(new Date());
-  let [returnDate, setRetunrDate] = useState();
+  let [returnDate, setRetunrDate] = useState(null);
 
   // eslint-disable-next-line
   const [showForm, setShowForm] = useState(false);
