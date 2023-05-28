@@ -2,15 +2,6 @@ import React, { useContext } from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { AuthContext } from '../context/AuthContext';
-<<<<<<< HEAD
-import SearchBox from './SearchBox'
-import { BrowserRouter as Routes, Route} from 'react-router-dom';
-
-
-
-const Header = () => {
-  const auth = useContext(AuthContext);
-=======
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
@@ -22,7 +13,6 @@ const Header = () => {
     navigate('/');
   };
 
->>>>>>> master
   return (
     <header>
       <Navbar

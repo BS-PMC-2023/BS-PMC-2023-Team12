@@ -3,12 +3,7 @@ import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
-<<<<<<< HEAD
-
-const ProductsLst = (props) => {
-  const [data, setData] = useState([]);
-=======
-import { Form, Button, FormGroup, FormLabel } from 'react-bootstrap';
+import { Button, FormGroup, FormLabel } from 'react-bootstrap';
 import FormContainer from '../FormContainer';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -27,7 +22,6 @@ const ProductsLst = (props) => {
 
   // eslint-disable-next-line
   const [showForm, setShowForm] = useState(false);
->>>>>>> master
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -38,28 +32,6 @@ const ProductsLst = (props) => {
     fetchData();
   }, [props.myProp]);
 
-<<<<<<< HEAD
-  const filteredData = data.filter((item) =>
-    item.name.toLowerCase().includes(keyword.toLowerCase())
-  );
-
-  return (
-    <div>
-      <Form>
-        <Form.Group controlId="searchForm">
-          <Form.Control
-            type="text"
-            placeholder="Search"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-        </Form.Group>
-      </Form>
-
-      <h1>{props.name} List</h1>
-
-      <div className="row row-cols-3 g-4">
-=======
   const handleBorrowButtonClick = (id) => {
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
@@ -137,7 +109,6 @@ const ProductsLst = (props) => {
           </Form.Group>
         </Form>
 
->>>>>>> master
         {filteredData.map((item) => (
           <ListGroup as="ol" key={item._id}>
             <ListGroup.Item as="li">
@@ -147,12 +118,6 @@ const ProductsLst = (props) => {
                 <br />
                 {item.available ? (
                   <div className="d-flex justify-content-between align-items-start">
-<<<<<<< HEAD
-                    <Badge bg="primary" pill>
-                      פנוי
-                    </Badge>
-                    <button type="button" className="btn btn-primary">
-=======
                     <Badge bg="primary" pill style={{ fontSize: 15 }}>
                       פנוי
                     </Badge>
@@ -161,21 +126,11 @@ const ProductsLst = (props) => {
                       className="btn btn-primary"
                       onClick={() => handleBorrowButtonClick(item.id)}
                     >
->>>>>>> master
                       השאל
                     </button>
                   </div>
                 ) : (
                   <div className="d-flex justify-content-between align-items-start">
-<<<<<<< HEAD
-                    <Badge bg="primary" pill>
-                      תפוס
-                    </Badge>
-                    <div>student id: {item.studentID}</div>
-                  </div>
-                )}
-              </div>
-=======
                     <Badge bg="danger" pill style={{ fontSize: 15 }}>
                       תפוס
                     </Badge>
@@ -231,18 +186,12 @@ const ProductsLst = (props) => {
                   </FormContainer>
                 </React.Fragment>
               )}
->>>>>>> master
             </ListGroup.Item>
           </ListGroup>
         ))}
       </div>
-<<<<<<< HEAD
-    </div>
-  );
-=======
     );
   }
->>>>>>> master
 };
 
 export default ProductsLst;
