@@ -28,15 +28,23 @@ const Header = () => {
                 width="60"
                 height="60"
                 className="d-inline-block align-top"
+                
               />
+              
             </Navbar.Brand>
           </LinkContainer>
+         
+
+         
+         
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
+              
               <LinkContainer to="/contact">
                 <Nav.Link>
                   צור קשר <i className="fas fa-phone"></i>
+                  
                 </Nav.Link>
               </LinkContainer>
 
@@ -80,10 +88,15 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
+              
             </Nav>
+
           </Navbar.Collapse>
+
         </Container>
+        
       </Navbar>
+      
     </header>
   );
 };
