@@ -33,6 +33,9 @@ const ProductsLst = (props) => {
   }, [props.myProp]);
 
   const handleBorrowButtonClick = (id) => {
+    console.log('------' + borrowingItemId);
+    debugger;
+
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
     } else {
@@ -64,6 +67,8 @@ const ProductsLst = (props) => {
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
     returnDate = formattedReturnDate;
+
+
     try {
       await sendRequest(
         'http://localhost:5000/borrow/addborrow',
