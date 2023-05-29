@@ -67,9 +67,7 @@ const PersonalZone = () => {
     } catch (err) {
       console.log(err);
     }
-
   };
-
   const updateReturnDate = async (borrow) => {
     const formattedReturnDate = getFormattedDate(returnDates[borrow._id]);
 
@@ -105,6 +103,27 @@ const PersonalZone = () => {
     }
 
     return dd + '/' + mm + '/' + yyyy;
+  };
+
+  const reportABug = async (borrow) => {
+
+    try {
+      await sendRequest(
+        'http://localhost:5000/api/users/reportABug',
+        'POST',
+        JSON.stringify({
+          email: auth.email,
+          equipmentID: borrow.equipmentID,   
+          name: borrow.name 
+           }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+    } catch (err) {
+      throw err;
+    }
+    alert('ההודעה הועברה למנהל המחסן');
   };
 
   const renderSelectedNavItemContent = () => {
@@ -158,7 +177,7 @@ const PersonalZone = () => {
                     <th>תאריך השאלה</th>
                     <th>תאריך להחזרה</th>
                     {auth.role !== 'student' && (
-                    <th >שינוי תאריך החזרה</th>
+                      <th >שינוי תאריך החזרה</th>
                     )}
                   </tr>
                 </thead>
@@ -191,17 +210,26 @@ const PersonalZone = () => {
                           </td>
                         )}
                         {auth.role !== 'student' && (
+                          <td >
+                            <Button
+                              variant="primary"
+                              className="btn-sm confirm-return-button"
+                              onClick={() => updateReturnDate(borrow)}
+                              disabled={!returnDates[borrow._id]} // Disable button if return date is not selected
+                            >
+                              שנה תאריך החזרה
+                            </Button>
+                          </td>
+                        )}
                         <td >
                           <Button
                             variant="primary"
                             className="btn-sm confirm-return-button"
-                            onClick={() => updateReturnDate(borrow)}
-                            disabled={!returnDates[borrow._id]} // Disable button if return date is not selected
+                            onClick={() => reportABug(borrow)}
                           >
-                            שנה תאריך החזרה
-                          </Button>
+                            דווח על בעיה במוצר                          
+                            </Button>
                         </td>
-                        )}
                       </tr>
                     ))}
                 </tbody>
@@ -271,6 +299,15 @@ const PersonalZone = () => {
                         <td>{borrow.equipmentID}</td>
                         <td>{borrow.borrowDate}</td>
                         <td>{borrow.returnDate}</td>
+                        <td >
+                          <Button
+                            variant="primary"
+                            className="btn-sm confirm-return-button"
+                            onClick={() => reportABug(borrow)}
+                          >
+                            דווח על בעיה במוצר                          
+                            </Button>
+                        </td>
                       </tr>
                     ))}
                 </tbody>
