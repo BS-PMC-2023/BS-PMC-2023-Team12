@@ -179,6 +179,10 @@ const PersonalZone = () => {
                     {auth.role !== 'student' && (
                       <th >שינוי תאריך החזרה</th>
                     )}
+                    {auth.role !== 'student' && (
+                      <th >שינוי תאריך החזרה</th>
+                    )}
+                    <th>דיווח על תקלה</th>
                   </tr>
                 </thead>
                 <tbody>
