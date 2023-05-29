@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Form from 'react-bootstrap/Form';
 import axios from 'axios';
-import { Form, Button, FormGroup, FormLabel } from 'react-bootstrap';
+import { Button, FormGroup, FormLabel } from 'react-bootstrap';
 import FormContainer from '../FormContainer';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -29,9 +30,12 @@ const ProductsLst = (props) => {
       setData(result.data);
     };
     fetchData();
-  }, [props.myProp]);
+  }, []);
 
   const handleBorrowButtonClick = (id) => {
+    console.log('------' + borrowingItemId);
+    debugger;
+
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
     } else {
@@ -63,6 +67,7 @@ const ProductsLst = (props) => {
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
     returnDate = formattedReturnDate;
+
     try {
       await sendRequest(
         'http://localhost:5000/borrow/addborrow',
