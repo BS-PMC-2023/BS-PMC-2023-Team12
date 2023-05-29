@@ -7,6 +7,7 @@ import {
   FormControl,
   ListGroup,
 } from 'react-bootstrap';
+import { ListGroupItem } from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
 import { AuthContext } from '../context/AuthContext';
 import Loader from '../components/Loader';
@@ -24,23 +25,27 @@ const PersonalZone = () => {
   const [name, setName] = useState(auth.userName);
   const [password, setPassword] = useState('');
   const [selectedNavItem, setSelectedNavItem] = useState('home');
+  const [loadedBorrows, setLoadedBorrows] = useState();
 
-  const [loadedData, setLoadedData] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBorrows = async () => {
       try {
-        const response = await sendRequest('http://localhost:5000/borrow/getUserBorrows', 'GET', null, {
-          'Content-Type': 'application/json',
-        });
-        const { user, name, email, isAvailable, userID } = response.data;
-        setLoadedData({ user, name, email, isAvailable, userID });
-      } catch (err) {
-        console.log(err);
-      }
+        const responseData = await sendRequest('http://localhost:5000/borrow');
+        setLoadedBorrows(responseData.borrows);
+      } catch (err) { }
     };
-    fetchData();
+    fetchBorrows();
   }, [sendRequest]);
+
+  const [sortState, setSortState] = useState('none');
+  const sortMethods = {
+    none: { method: (a, b) => null },
+    CreatedAt: { method: (a, b) => (a.createdAt < b.createdAt ? -1 : 1) },
+    BorrowDate: { method: (a, b) => (a.borrowDate < b.borrowDate ? -1 : 1) },
+    ReturnDate: { method: (a, b) => (a.returnDate < b.returnDate ? -1 : 1) },
+    EquipmentID: { method: (a, b) => (a.equipmentID < b.equipmentID ? -1 : 1) },
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -61,44 +66,150 @@ const PersonalZone = () => {
     } catch (err) {
       console.log(err);
     }
-    try {
-      const response = await sendRequest(
-        'http://localhost:5000/borrow/getUserBorrows',
-        'GET',
-        null,
-        {
-          'Content-Type': 'application/json',
-        }
-      );
-      const { user, name, email, isAvailable, userID } = response.data;
-      setLoadedData({ user, name, email, isAvailable, userID });
-      console.log(email);
-    } catch (err) {
-      console.log(err);
-    }
+    
   };
 
   const renderSelectedNavItemContent = () => {
     switch (selectedNavItem) {
       case 'current':
         return (
-          <div>
-            <ListGroup as="ol">
-              <ListGroup.Item as="li">
-                <div className="ms-2 me-auto">
-                  <div className="fw-bold">{loadedData.name}</div>
-                  {loadedData.email}
-                  <br />
-                </div>
-              </ListGroup.Item>
-            </ListGroup>
-          </div>
+          <>
+          
+            <Col>
+              <ListGroup variant="flush">
+                <ListGroupItem
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                >
+                  <select
+                    style={{
+                      direction: 'rtl',
+                      padding: '0.5rem',
+                      border: '1px solid #678773',
+                      borderRadius: '4px',
+                      backgroundColor: '#fff',
+                      color: '#333',
+                      fontSize: '1rem',
+                      minwidth: '100px',
+                    }}
+                    onChange={(e) => setSortState(e.target.value)}
+                  >
+                    <option value="CreatedAt">מיין לפי</option>
+                    <option value="BorrowDate">תאריך השאלה</option>
+                    <option value="ReturnDate">תאריך החזרה</option>
+                    <option value="EquipmentID">מספר מק"ט</option>
+                  </select>
+                </ListGroupItem>
+              </ListGroup>
+            </Col>
+      
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <Table
+                striped
+                bordered
+                hover
+                responsive
+                className="table-sm table-custom"
+              >
+                <thead>
+                  <tr>
+                    <th>מייל</th>
+                    <th>מק"ט</th>
+                    <th>תאריך השאלה</th>
+                    <th>תאריך להחזרה</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadedBorrows
+                    ?.sort(sortMethods[sortState].method)
+                    ?.filter((borrow) => !borrow.isAvailable)
+                    ?.filter((borrow) => borrow.userID === auth.userId)
+                    ?.map((borrow) => (
+                      <tr key={borrow._id}>
+                        <td>
+                          <a href={`mailto:${borrow.email}`}>{borrow.email}</a>
+                        </td>
+                        <td>{borrow.equipmentID}</td>
+                        <td>{borrow.borrowDate}</td>
+                        <td>{borrow.returnDate}</td>
+                        
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            )}
+          </>
         );
       case 'history':
         return (
-          <div>
-            <h1>תוכן 2</h1>
-          </div>
+          <>
+          
+            <Col>
+              <ListGroup variant="flush">
+                <ListGroupItem
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                >
+                  <select
+                    style={{
+                      direction: 'rtl',
+                      padding: '0.5rem',
+                      border: '1px solid #678773',
+                      borderRadius: '4px',
+                      backgroundColor: '#fff',
+                      color: '#333',
+                      fontSize: '1rem',
+                      minwidth: '100px',
+                    }}
+                    onChange={(e) => setSortState(e.target.value)}
+                  >
+                    <option value="CreatedAt">מיין לפי</option>
+                    <option value="BorrowDate">תאריך השאלה</option>
+                    <option value="ReturnDate">תאריך החזרה</option>
+                    <option value="EquipmentID">מספר מק"ט</option>
+                  </select>
+                </ListGroupItem>
+              </ListGroup>
+            </Col>
+      
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <Table
+                striped
+                bordered
+                hover
+                responsive
+                className="table-sm table-custom"
+              >
+                <thead>
+                  <tr>
+                    <th>מייל</th>
+                    <th>מק"ט</th>
+                    <th>תאריך השאלה</th>
+                    <th>תאריך להחזרה</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loadedBorrows
+                    ?.sort(sortMethods[sortState].method)
+                    ?.filter((borrow) => borrow.isAvailable)
+                    ?.filter((borrow) => borrow.userID === auth.userId)
+                    ?.map((borrow) => (
+                      <tr key={borrow._id}>
+                        <td>
+                          <a href={`mailto:${borrow.email}`}>{borrow.email}</a>
+                        </td>
+                        <td>{borrow.equipmentID}</td>
+                        <td>{borrow.borrowDate}</td>
+                        <td>{borrow.returnDate}</td>
+                        
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            )}
+          </>
         );
       default:
         return null;
@@ -165,14 +276,14 @@ const PersonalZone = () => {
                           השאלות פעילות
                         </Nav.Link>
                         <Nav.Link onClick={() => setSelectedNavItem('history')}>
-                          היסטוריית השאלות
+                          היסטוריה
                         </Nav.Link>
                       </Nav>
                     </Container>
                   </Navbar>
                 </Row>
                 <Row>
-                  <Col>{renderSelectedNavItemContent()}</Col>
+                  {renderSelectedNavItemContent()}
                 </Row>
               </div>
             </td>
