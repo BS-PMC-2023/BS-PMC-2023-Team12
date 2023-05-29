@@ -11,18 +11,16 @@ import Message from '../Message';
 import { useHttpClient } from '../../hooks/httpHook';
 import { AuthContext } from '../../context/AuthContext';
 
-
 const ProductsLst = (props) => {
   const auth = useContext(AuthContext);
   const { error, sendRequest } = useHttpClient();
 
   const [data, setData] = useState([]);
   const [borrowingItemId, setBorrowingItemId] = useState(null);
+
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState(null);
 
-  // eslint-disable-next-line
-  const [showForm, setShowForm] = useState(false);
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -31,20 +29,16 @@ const ProductsLst = (props) => {
       setData(result.data);
     };
     fetchData();
-  }, []);
+  }, [props.myProp]);
 
   const handleBorrowButtonClick = (id) => {
-
-    console.log("------"+ borrowingItemId);
-      debugger;
+    console.log('------' + borrowingItemId);
+    debugger;
 
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
-      setShowForm(false);
     } else {
       setBorrowingItemId(id);
-      setShowForm(true);
-
     }
   };
 
@@ -73,7 +67,6 @@ const ProductsLst = (props) => {
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
     returnDate = formattedReturnDate;
 
-
     try {
       await sendRequest(
         'http://localhost:5000/borrow/addborrow',
@@ -99,7 +92,6 @@ const ProductsLst = (props) => {
   const filteredData = data.filter((item) =>
     item.name.toLowerCase().includes(keyword.toLowerCase())
   );
-
 
   if (auth.userId != null) {
     return (
@@ -199,6 +191,12 @@ const ProductsLst = (props) => {
           </ListGroup>
         ))}
       </div>
+    );
+  } else {
+    return (
+      <h1 style={{ marginTop: '70px' }}>
+        עליך להתחבר למערכת על מנת להשאיל ציוד
+      </h1>
     );
   }
 };

@@ -19,20 +19,19 @@ const getUsers = async (req, res, next) => {
 };
 
 //get current user profile data
-const getUserProfile = async (req, res, next) =>{
+const getUserProfile = async (req, res, next) => {
+  const user = await User.findById(req.user._id);
 
-  const user = await User.findById(req.user._id)
-
-  if(user){
+  if (user) {
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-    })
-  }else{
-    res.status(404)
-    throw new Error('User not found')
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
   }
 };
 
@@ -95,6 +94,7 @@ const register = async (req, res, next) => {
     email: createdUser.email,
     name: createdUser.name,
     isAdmin: createdUser.isAdmin,
+    role: createdUser.role,
     token: token,
   });
 };
@@ -150,6 +150,7 @@ const login = async (req, res, next) => {
     email: existingUser.email,
     name: existingUser.name,
     isAdmin: existingUser.isAdmin,
+    role: existingUser.role,
     token: token,
   });
 };
@@ -286,29 +287,24 @@ const deleteUser = async (req, res, next) => {
 
 //ipdate the admin rights to the user in the database
 const updateAdmin = async (req, res, next) => {
-
   const { id } = req.params;
-  
+
   try {
-    const user = await User.findOne({_id: id});
+    const user = await User.findOne({ _id: id });
     user.isAdmin = !user.isAdmin;
     const UpdateUser = await user.save();
-  
+
     res.json({
       isAdmin: UpdateUser.isAdmin,
-    });  
+    });
   } catch (err) {
     return next(err);
   }
-
 };
 
 //update current user profile data
 const updateUserProfile = async (req, res, next) => {
-  console.log("in the function");
   const { name, _id, password } = req.body;
-  console.log(name,_id,password);
-
   let hashpassword;
   try {
     hashpassword = await bcrypt.hash(password, 12);
@@ -319,13 +315,10 @@ const updateUserProfile = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ _id: _id });
-    console.log(user.name);
     user.name = name;
-    console.log(user.name);
     user.password = hashpassword;
-    
+
     const UpdateUser = await user.save();
-    
 
     res.json({
       name: UpdateUser.name,
@@ -350,7 +343,6 @@ const updateUserProfile = async (req, res, next) => {
     const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
     return next(error);
   }
-
 };
 
 exports.getUsers = getUsers;
