@@ -21,6 +21,8 @@ const ProductsLst = (props) => {
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState(null);
 
+
+
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -31,9 +33,10 @@ const ProductsLst = (props) => {
     fetchData();
   }, [props.myProp]);
 
+
+
   const handleBorrowButtonClick = (id) => {
     console.log('------' + borrowingItemId);
-    debugger;
 
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
@@ -65,28 +68,36 @@ const ProductsLst = (props) => {
     if (rmm < 10) rmm = '0' + rmm;
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
-    returnDate = formattedReturnDate;
 
+ 
+    if((fdd-rdd)<7)
+    {
     try {
-      await sendRequest(
-        'http://localhost:5000/borrow/addborrow',
-        'POST',
-        JSON.stringify({
-          userID: auth.userId,
-          equipmentID: borrowingItemId,
-          name: auth.userName,
-          email: auth.email,
-          borrowDate: formattedBorrow,
-          returnDate: formattedReturnDate,
-        }),
-        {
-          'Content-Type': 'application/json',
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
-    alert('השאלת הציוד בוצע בהצלחה');
+        await sendRequest(
+          'http://localhost:5000/borrow/addborrow',
+          'POST',
+          JSON.stringify({
+            userID: auth.userId,
+            equipmentID: borrowingItemId,
+            name: auth.userName,
+            email: auth.email,
+            borrowDate: formattedBorrow,
+            returnDate: formattedReturnDate,
+          }),
+          {
+            'Content-Type': 'application/json',
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+      alert('השאלת הציוד בוצע בהצלחה');
+      }else{
+        alert('לא ניתן להשכיר יותר משבוע');
+    
+      }
+
+  
   };
 
   const filteredData = data.filter((item) =>
