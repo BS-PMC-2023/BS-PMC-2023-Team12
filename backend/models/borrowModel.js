@@ -8,7 +8,12 @@ const borrowSchema = mongoose.Schema(
     //   ref: 'User',
     // },
 
-    user: {
+    userID: {
+      type: String,
+      required: true,
+    },
+
+    equipmentID: {
       type: String,
       required: true,
     },
@@ -20,16 +25,22 @@ const borrowSchema = mongoose.Schema(
 
     email: {
       type: String,
-      required: false,
+      required: true,
     },
 
     borrowDate: {
       type: String,
-      required: false,
+      required: true,
     },
 
     returnDate: {
       type: String,
+      required: true,
+    },
+
+    isAvailable: {
+      type: Boolean,
+      default: false,
       required: false,
     },
   },

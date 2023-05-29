@@ -146,7 +146,11 @@ const PersonalZone = () => {
                 <h5> </h5>
                 <div className="d-grid gap-3">
                   <Button type="submit" variant="primary">
-                    {isLoading ? <Loader variant="light" /> : <string>עדכן</string>}
+                    {isLoading ? (
+                      <Loader variant="light" />
+                    ) : (
+                      <string>עדכן</string>
+                    )}
                   </Button>
                 </div>
               </Form>

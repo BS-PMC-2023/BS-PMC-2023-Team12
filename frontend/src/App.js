@@ -12,8 +12,10 @@ import ProductsScreen from './screens/ProductsScreen';
 import ProductsLst from './components/ProductScreen/ProductsLst';
 import UserListScreen from './screens/UserListScreen';
 import UpdatesProducts from './screens/UpdatesProducts';
+import TrackingScreen from './screens/TrackingScreen';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
+import SearchBox from './components/SearchBox'
 
 const App = () => {
   const { token, login, logout, userId, userName, isAdmin, email } = useAuth();
@@ -36,7 +38,9 @@ const App = () => {
         <main className="py-3">
           <Container>
             <Routes>
+              
               <Route path="/" element={<HomeScreen />} />
+              <Route path='/search/:keyword' element={<ProductsScreen/>}/>
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
               <Route path="/sendsmailscreen" element={<SendEmailScreen />} />
@@ -51,6 +55,7 @@ const App = () => {
                 element={<ProductsLst name="Recording" myProp="recording" />}
               />
               <Route path="/admin/userslist" element={<UserListScreen />} />
+              <Route path="/admin/tracking" element={<TrackingScreen />} />
               <Route
                 path="/admin/UpdatesProducts"
                 element={<UpdatesProducts />}
