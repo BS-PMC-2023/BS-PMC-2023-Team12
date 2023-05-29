@@ -32,6 +32,7 @@ const LoginScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
     try {
       const responseData = await sendRequest(
         'http://localhost:5000/api/users/login',
@@ -49,7 +50,8 @@ const LoginScreen = () => {
         responseData.token,
         responseData.name,
         responseData.isAdmin,
-        responseData.email
+        responseData.email,
+        responseData.role
       );
       navigate('/');
     } catch (err) {}

@@ -1,106 +1,100 @@
 import React from 'react';
 import CardProd from '../components/ProductScreen/CardProd';
-import { Routes, Route, useParams } from 'react-router-dom';
-import { Form } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 
-const products = [
+const PRODUCTS = [
   {
-    
-    img: "camera.jpg",
-    header: "Camera",
-    p: "ציוד צילום",
-    a:"צפה בזמינות",
-    href: "./CamerasScreen"
+    id: 1,
+    img: '/camera.jpg',
+    header: 'Camera',
+    p: 'ציוד צילום',
+    a: 'צפה בזמינות',
+    href: './CamerasScreen',
   },
   {
-    img: "/microphone.jpg",
-    header: "Recording",
-    p:"ציוד הקלטה" ,
-    a:"צפה בזמינות",
-    href: "./RecordingScreen"
+    id: 2,
+    img: '/microphone.jpg',
+    header: 'Recording',
+    p: 'ציוד הקלטה',
+    a: 'צפה בזמינות',
+    href: './RecordingScreen',
   },
   {
-    img:"/ipad.jpg" ,
-    header:"Apple" ,
-    p:"טאבלטים" ,
-    a:"צפה בזמינות",
-    href: "./AppleScreen"
+    id: 3,
+    img: '/ipad.jpg',
+    header: 'Apple',
+    p: 'טאבלטים',
+    a: 'צפה בזמינות',
   },
   {
-    img:"/tripod.jpg" ,
-    header:"Tripod" ,
-    p:"חצובות" ,
-    a:"צפה בזמינות",
-    href: "./TripodScreen"
+    id: 4,
+    img: '/tripod.jpg',
+    header: 'Tripod',
+    p: 'חצובות',
+    a: 'צפה בזמינות',
   },
   {
-    img:"/projector.jpg" ,
-    header:"Projectors" ,
-    p:"מקרנים" ,
-    a:"צפה בזמינות",
-    href: "./ProjectorsScreen"
+    id: 5,
+    img: '/projector.jpg',
+    header: 'Projectors',
+    p: 'מקרנים',
+    a: 'צפה בזמינות',
   },
   {
-    img:"/cables.jpg" ,
-    header:"Cables" ,
-    p:"כבלים" ,
-    a:"צפה בזמינות",
-    href: "./CablesScreen"
+    id: 6,
+    img: '/cables.jpg',
+    header: 'Cables',
+    p: 'כבלים',
+    a: 'צפה בזמינות',
   },
   {
-    img:"/lights.jpg" ,
-    header:"Lights" ,
-    p:"תאורה" ,
-    a:"צפה בזמינות",
-    href: "./LightsScreen"
+    id: 7,
+    img: '/lights.jpg',
+    header: 'Lights',
+    p: 'תאורה',
+    a: 'צפה בזמינות',
   },
   {
-    img:"/convertors.jpg" ,
-    header:"Convertos" ,
-    p:"ממירים" ,
-    a:"צפה בזמינות",
-    href: "./ConvertorsScreen"
-  }
+    id: 8,
+    img: '/convertors.jpg',
+    header: 'Convertos',
+    p: 'ממירים',
+    a: 'צפה בזמינות',
+  },
 ];
 
 const ProductsScreen = () => {
-  const [keyword, setKeyword] = React.useState('');
-  const [filteredProducts, setFilteredProducts] = React.useState([]);
+  const { search } = useLocation();
 
-  React.useEffect(() => {
-    if (keyword === '') {
-      setFilteredProducts(products);
-    } else {
-      const filtered = products.filter((product) => product.p === keyword);
-      setFilteredProducts(filtered);
-    }
-  }, [keyword]);
+  const keyword = search ? search.split('?')[1] : '';
 
-  const productCards = filteredProducts.map((product) => (
-    <div className="col" key={product.id}>
-      <CardProd
-        img={product.img}
-        header={product.header}
-        p={product.p}
-        a={product.a}
-        href={product.href}
-      />
-    </div>
-  ));
+  const newSearch = 'http://localhost:3000/';
+
+  const filteredProducts = PRODUCTS.filter(
+    (product) =>
+      product.header.toLowerCase().includes(keyword.toLowerCase()) ||
+      product.p.toLowerCase().includes(keyword.toLowerCase())
+  );
+
+  if (filteredProducts.length === 0) {
+    return <h1> "{keyword}" לא קיים מוצר בשם</h1>;
+  }
 
   return (
     <div>
-      <Form>
-        <Form.Group controlId="searchForm">
-          <Form.Control
-            type="text"
-            placeholder="Search"
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-          />
-        </Form.Group>
-      </Form>
-      <div className="row row-cols-3 g-4">{productCards}</div>
+      <div className="row row-cols-3 g-4">
+        {filteredProducts.map((product) => (
+          <div className="col" key={product.id}>
+            <CardProd
+              img={product.img}
+              header={product.header}
+              p={product.p}
+              a={product.a}
+              href={newSearch + product.href}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
