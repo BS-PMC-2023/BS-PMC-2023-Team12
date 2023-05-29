@@ -22,7 +22,7 @@ const PRODUCTS = [
   {
     id: 3,
     img: '/ipad.jpg',
-    header: 'Apple',
+    header: 'Tablets',
     p: 'טאבלטים',
     a: 'צפה בזמינות',
   },
@@ -82,6 +82,7 @@ const ProductsScreen = () => {
 
   return (
     <div>
+      <h1> </h1>
       <div className="row row-cols-3 g-4">
         {filteredProducts.map((product) => (
           <div className="col" key={product.id}>
@@ -95,6 +96,7 @@ const ProductsScreen = () => {
           </div>
         ))}
       </div>
+      <h1> </h1>
     </div>
   );
 };

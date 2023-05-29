@@ -21,7 +21,6 @@ const ProductsLst = (props) => {
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState(null);
 
-  // eslint-disable-next-line
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -67,7 +66,6 @@ const ProductsLst = (props) => {
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
     returnDate = formattedReturnDate;
-
 
     try {
       await sendRequest(
@@ -193,6 +191,12 @@ const ProductsLst = (props) => {
           </ListGroup>
         ))}
       </div>
+    );
+  } else {
+    return (
+      <h1 style={{ marginTop: '70px' }}>
+        עליך להתחבר למערכת על מנת להשאיל ציוד
+      </h1>
     );
   }
 };
