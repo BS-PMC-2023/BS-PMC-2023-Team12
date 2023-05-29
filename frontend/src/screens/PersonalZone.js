@@ -16,6 +16,8 @@ import { Table, Row, Col } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from 'react-datepicker';
 
 const PersonalZone = () => {
   const auth = useContext(AuthContext);
@@ -26,7 +28,10 @@ const PersonalZone = () => {
   const [password, setPassword] = useState('');
   const [selectedNavItem, setSelectedNavItem] = useState('home');
   const [loadedBorrows, setLoadedBorrows] = useState();
-
+  let [borrowDate, setBorrowDate] = useState(new Date());
+  let [returnDate, setRetunrDate] = useState(null);
+  const [borrowingItemId, setBorrowingItemId] = useState(null);
+  const [returnDates, setReturnDates] = useState({});
 
   useEffect(() => {
     const fetchBorrows = async () => {
@@ -66,7 +71,44 @@ const PersonalZone = () => {
     } catch (err) {
       console.log(err);
     }
-    
+
+  };
+
+  const updateReturnDate = async (borrow) => {
+    const formattedReturnDate = getFormattedDate(returnDates[borrow._id]);
+
+    try {
+      await sendRequest(
+        'http://localhost:5000/borrow/updateReturnBorrow',
+        'PUT',
+        JSON.stringify({
+          returnDate: formattedReturnDate,
+          _id: borrow._id
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+    alert('שינוי תאריך השאלה בוצע בהצלחה');
+  };
+
+  const getFormattedDate = (date) => {
+    const yyyy = date.getFullYear();
+    let mm = date.getMonth() + 1;
+    let dd = date.getDate();
+
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+
+    return dd + '/' + mm + '/' + yyyy;
   };
 
   const renderSelectedNavItemContent = () => {
@@ -74,7 +116,7 @@ const PersonalZone = () => {
       case 'current':
         return (
           <>
-          
+
             <Col>
               <ListGroup variant="flush">
                 <ListGroupItem
@@ -101,7 +143,7 @@ const PersonalZone = () => {
                 </ListGroupItem>
               </ListGroup>
             </Col>
-      
+
             {isLoading ? (
               <Loader />
             ) : (
@@ -118,6 +160,7 @@ const PersonalZone = () => {
                     <th>מק"ט</th>
                     <th>תאריך השאלה</th>
                     <th>תאריך להחזרה</th>
+                    <th>שינוי תאריך החזרה</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -133,7 +176,25 @@ const PersonalZone = () => {
                         <td>{borrow.equipmentID}</td>
                         <td>{borrow.borrowDate}</td>
                         <td>{borrow.returnDate}</td>
-                        
+                        <td>
+                          <DatePicker
+                            selected={returnDates[borrow._id]}
+                            onChange={(date) => setReturnDates(prevState => ({ ...prevState, [borrow._id]: date }))}
+                            dateFormat="dd/MM/yyyy"
+                            minDate={new Date()}
+                          />
+                        </td>
+                        <td>
+                          <Button
+                            variant="primary"
+                            className="btn-sm confirm-return-button"
+                            onClick={() => updateReturnDate(borrow)}
+                            disabled={!returnDates[borrow._id]} // Disable button if return date is not selected
+
+                          >
+                            שנה תאריך החזרה
+                          </Button>
+                        </td>
                       </tr>
                     ))}
                 </tbody>
@@ -144,7 +205,7 @@ const PersonalZone = () => {
       case 'history':
         return (
           <>
-          
+
             <Col>
               <ListGroup variant="flush">
                 <ListGroupItem
@@ -171,7 +232,7 @@ const PersonalZone = () => {
                 </ListGroupItem>
               </ListGroup>
             </Col>
-      
+
             {isLoading ? (
               <Loader />
             ) : (
@@ -203,7 +264,7 @@ const PersonalZone = () => {
                         <td>{borrow.equipmentID}</td>
                         <td>{borrow.borrowDate}</td>
                         <td>{borrow.returnDate}</td>
-                        
+
                       </tr>
                     ))}
                 </tbody>
@@ -268,20 +329,20 @@ const PersonalZone = () => {
             </td>
             <td style={{ verticalAlign: 'top', width: '80%' }}>
               <div style={{ paddingLeft: '50px' }}>
-                <Row>
+              <Row>
                   <Navbar bg="primary" variant="dark">
                     <Container>
-                      <Nav className="me-auto">
-                        <Nav.Link onClick={() => setSelectedNavItem('current')}>
-                          השאלות פעילות
-                        </Nav.Link>
+                      <Nav style={{ marginLeft: 'auto' }}>
                         <Nav.Link onClick={() => setSelectedNavItem('history')}>
                           היסטוריה
+                        </Nav.Link>
+                        <Nav.Link onClick={() => setSelectedNavItem('current')}>
+                          השאלות פעילות
                         </Nav.Link>
                       </Nav>
                     </Container>
                   </Navbar>
-                </Row>
+                </Row>
                 <Row>
                   {renderSelectedNavItemContent()}
                 </Row>

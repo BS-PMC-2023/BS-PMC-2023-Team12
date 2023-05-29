@@ -140,7 +140,26 @@ const updateAvalibale = async (req, res, next) => {
     return next(err);
   }
 };
+const updateReturnBorrow = async (req, res, next) => {
 
+  const { _id,returnDate } = req.body;
+  
+  try {
+    const borrow = await Borrow.findById({_id});
+    console.log(returnDate);
+    console.log(borrow);
+    borrow.returnDate = returnDate;
+    const updateborrow = await borrow.save();
+  
+    res.json({
+      returnDate: updateborrow.returnDate,
+    });  
+  } catch (err) {
+    return next(err);
+  }
+
+};
 exports.addBorrow = addBorrow;
 exports.getBorrow = getBorrow;
 exports.updateAvalibale = updateAvalibale;
+exports.updateReturnBorrow = updateReturnBorrow;
