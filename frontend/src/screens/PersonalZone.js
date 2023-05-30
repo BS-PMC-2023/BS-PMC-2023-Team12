@@ -34,7 +34,7 @@ const PersonalZone = () => {
       try {
         const responseData = await sendRequest('http://localhost:5000/borrow');
         setLoadedBorrows(responseData.borrows);
-      } catch (err) { }
+      } catch (err) {}
     };
     fetchBorrows();
   }, [sendRequest]);
@@ -77,7 +77,7 @@ const PersonalZone = () => {
         'PUT',
         JSON.stringify({
           returnDate: formattedReturnDate,
-          _id: borrow._id
+          _id: borrow._id,
         }),
         {
           'Content-Type': 'application/json',
@@ -106,16 +106,15 @@ const PersonalZone = () => {
   };
 
   const reportABug = async (borrow) => {
-
     try {
       await sendRequest(
         'http://localhost:5000/api/users/reportABug',
         'POST',
         JSON.stringify({
           email: auth.email,
-          equipmentID: borrow.equipmentID,   
-          name: borrow.name 
-           }),
+          equipmentID: borrow.equipmentID,
+          name: borrow.name,
+        }),
         {
           'Content-Type': 'application/json',
         }
@@ -176,12 +175,8 @@ const PersonalZone = () => {
                     <th>מק"ט</th>
                     <th>תאריך השאלה</th>
                     <th>תאריך להחזרה</th>
-                    {auth.role !== 'student' && (
-                      <th >שינוי תאריך החזרה</th>
-                    )}
-                    {auth.role !== 'student' && (
-                      <th >שינוי תאריך החזרה</th>
-                    )}
+                    {auth.role !== 'student' && <th>שינוי תאריך החזרה</th>}
+                    {auth.role !== 'student' && <th>שינוי תאריך החזרה</th>}
                     <th>דיווח על תקלה</th>
                   </tr>
                 </thead>
@@ -214,7 +209,7 @@ const PersonalZone = () => {
                           </td>
                         )}
                         {auth.role !== 'student' && (
-                          <td >
+                          <td>
                             <Button
                               variant="primary"
                               className="btn-sm confirm-return-button"
@@ -225,14 +220,14 @@ const PersonalZone = () => {
                             </Button>
                           </td>
                         )}
-                        <td >
+                        <td>
                           <Button
                             variant="primary"
                             className="btn-sm confirm-return-button"
                             onClick={() => reportABug(borrow)}
                           >
-                            דווח על בעיה במוצר                          
-                            </Button>
+                            דווח על בעיה במוצר
+                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -244,7 +239,6 @@ const PersonalZone = () => {
       case 'history':
         return (
           <>
-
             <Col>
               <ListGroup variant="flush">
                 <ListGroupItem
@@ -303,14 +297,14 @@ const PersonalZone = () => {
                         <td>{borrow.equipmentID}</td>
                         <td>{borrow.borrowDate}</td>
                         <td>{borrow.returnDate}</td>
-                        <td >
+                        <td>
                           <Button
                             variant="primary"
                             className="btn-sm confirm-return-button"
                             onClick={() => reportABug(borrow)}
                           >
-                            דווח על בעיה במוצר                          
-                            </Button>
+                            דווח על בעיה במוצר
+                          </Button>
                         </td>
                       </tr>
                     ))}
@@ -334,7 +328,11 @@ const PersonalZone = () => {
         <tbody>
           <tr>
             <td style={{ verticalAlign: 'top', width: '20%' }}>
-              <Form onSubmit={submitHandler} className="text-end" style={{ direction: 'rtl' }}>
+              <Form
+                onSubmit={submitHandler}
+                className="text-end"
+                style={{ direction: 'rtl' }}
+              >
                 <FormGroup controlId="name">
                   <FormLabel>
                     <strong>שם מלא:</strong>
@@ -390,9 +388,7 @@ const PersonalZone = () => {
                     </Container>
                   </Navbar>
                 </Row>
-                <Row>
-                  {renderSelectedNavItemContent()}
-                </Row>
+                <Row>{renderSelectedNavItemContent()}</Row>
               </div>
             </td>
           </tr>
