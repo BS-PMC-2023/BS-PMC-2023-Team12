@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import emailjs from 'emailjs-com';
 
 const ContactPageScreen = () => {
-  const handleSubmit = (e) => {
+  const form = useRef();
+
+  const sendEmail = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+
+    emailjs
+      .sendForm('service_536wykn', 'template_l71okam', form.current, 'lBsAmmipMXui-CCNLQLfL')
+      .then((result) => {
+        console.log(result.text);
+        console.log("message sent")
+      }, (error) => {
+        console.log(error.text);
+      });
   };
+  
 
   return (
     <div>
@@ -16,11 +28,11 @@ const ContactPageScreen = () => {
         <ul>
           <li>
             Email:{' '}
-            <a href="mailto:RandomEmail@gmail.com">RandomEmail@gmail.com</a>
+            <a href="mailto:warehousesuppo@gmail.com">warehousesuppo@gmail.com</a>
           </li>
         </ul>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form ref={form} onSubmit={sendEmail}>
         <div style={{ marginBottom: '16px' }}>
           <label htmlFor="name" style={{ display: 'block', marginBottom: '4px' }}>
             Your Name:
@@ -28,7 +40,7 @@ const ContactPageScreen = () => {
           <input
             type="text"
             id="name"
-            name="name"
+            name="user_name"
             style={{ padding: '8px', width: '100%' }}
           />
         </div>
@@ -39,7 +51,7 @@ const ContactPageScreen = () => {
           <input
             type="email"
             id="email"
-            name="email"
+            name="user_email"
             style={{ padding: '8px', width: '100%' }}
           />
         </div>
