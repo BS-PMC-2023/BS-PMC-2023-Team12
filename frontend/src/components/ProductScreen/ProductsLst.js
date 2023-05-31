@@ -68,9 +68,13 @@ const ProductsLst = (props) => {
     if (rmm < 10) rmm = '0' + rmm;
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
+    const formattedReturnDate2 = "'" + ryyyy + '-' + rmm + '-' + rdd + "'";
+    
+    const d2 = new Date(formattedReturnDate2);
+    const oneDay = 24 * 60 * 60 * 1000;
+    const diffInDays = Math.round(Math.abs(borrow - d2) / oneDay);
 
- 
-    if((fdd-rdd)<7)
+    if(diffInDays <= 7)
     {
     try {
         await sendRequest(
