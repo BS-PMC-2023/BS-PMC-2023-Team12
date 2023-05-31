@@ -81,23 +81,29 @@ const ProductsScreen = () => {
   }
 
   return (
-    <div>
-      <h1> </h1>
-      <div className="row row-cols-3 g-4">
-        {filteredProducts.map((product) => (
-          <div className="col" key={product.id}>
-            <CardProd
-              img={product.img}
-              header={product.header}
-              p={product.p}
-              a={product.a}
-              href={newSearch + product.href}
-            />
-          </div>
-        ))}
+    <>
+      <hr className="hr-line-right"></hr>
+      <h1>ציוד</h1>
+      <hr className="hr-line-left"></hr>
+      <div>
+
+        <h1> </h1>
+        <div className="row row-cols-3 g-4">
+          {filteredProducts.map((product) => (
+            <div className="col" key={product.id}>
+              <CardProd
+                img={product.img}
+                header={product.header}
+                p={product.p}
+                a={product.a}
+                href={newSearch + product.href}
+              />
+            </div>
+          ))}
+        </div>
+        <h1> </h1>
       </div>
-      <h1> </h1>
-    </div>
+    </>
   );
 };
 

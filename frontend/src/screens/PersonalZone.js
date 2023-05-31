@@ -282,6 +282,7 @@ const PersonalZone = () => {
                     <th>מק"ט</th>
                     <th>תאריך השאלה</th>
                     <th>תאריך להחזרה</th>
+                    <th>דיווח על תקלה</th>
                   </tr>
                 </thead>
                 <tbody>

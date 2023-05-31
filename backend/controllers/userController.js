@@ -381,6 +381,43 @@ const reportABug = async (req, res, next) => {
   }
 };
 
+const sendComment = async (req, res, next) => {
+  const { text,name,email } = req.body;
+  console.log(text);
+  try {
+    
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'wmsvcteam12@gmail.com',
+        pass: 'kfgyejkhdbbvzmfm',
+      },
+    });
+
+    var mailOptions = {
+      from: 'email',
+      to: 'wmsvcteam12@gmail.com',
+      subject: 'הודעה ממשתמש',
+      text: `${text}\n  שם מלא:  ${name}\n מייל: ${email}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    //console.log(link);
+    res.json({
+      text: text,
+    });
+  } catch (err) {
+    const error = new HttpError(' נסה שוב.', 500);
+    return next(error);
+  }
+};
+
 exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.register = register;
@@ -391,3 +428,6 @@ exports.changePassword = changePassword;
 exports.updateUserProfile = updateUserProfile;
 exports.updateAdmin = updateAdmin;
 exports.reportABug = reportABug;
+exports.sendComment = sendComment;
+
+
