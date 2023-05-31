@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ContactPageScreen from './screens/ContactPageScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
@@ -60,6 +61,7 @@ const App = () => {
                 path="/admin/UpdatesProducts"
                 element={<UpdatesProducts />}
               />
+              <Route path="/contact" element={<ContactPageScreen />} />
             </Routes>
           </Container>
         </main>
