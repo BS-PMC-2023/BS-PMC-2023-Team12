@@ -38,7 +38,9 @@ const UpdateLst = () => {
   return (
     <div>
       <h1>Update List</h1>
-      <AddProduct style={{ marginBottom: '20px' }} />
+      <AddProduct/>
+      <div style={{ marginBottom: '80px' }} />
+      <h2>מחיקת פריט מהמערכת</h2>
       {data1.map((item, index) => (
         //<li key={item.id}>{item.name}</li>
         <ListGroup as="ol" key={item._id} style={{ marginTop: '5px' }}>

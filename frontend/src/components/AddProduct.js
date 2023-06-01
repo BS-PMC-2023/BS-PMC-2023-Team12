@@ -1,25 +1,40 @@
 import React from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
+import axios from 'axios';
 
 const AddProduct = () => {
+
+    const addCamera = async (kind, id) => {
+        try {
+          const res = await axios.delete(`/${kind}/${id}`);
+          console.log(res.data);
+        } catch (err) {
+          console.error(err.message); // Error message from server.
+        }
+      };
+
+
   return (
     <div>
         <h2>הוספת פריט למערכת</h2>
         <Form>
-            <Form.Group controlId="exampleForm.ControlInput1">
-                <Form.Label>Input Text</Form.Label>
+            <Form.Group style={{textAlign: 'right'}} controlId="exampleForm.ControlInput1">
                 <Row>
-                <Col>
-                    <Form.Control type="text" placeholder="מספר קטלוגי" style={{textAlign: 'right'}} />
-                </Col>
-                <Col>
-                    <Form.Control type="text" placeholder="שם המוצר" style={{textAlign: 'right'}} />
-                </Col>
+                    <Col>
+                        <Form.Control type="text" placeholder="מספר קטלוגי" style={{textAlign: 'right'}} />
+                    </Col>
+                    <Col>
+                        <Form.Control type="text" placeholder="שם המוצר" style={{textAlign: 'right'}} />
+                    </Col>
                 </Row>
                 <Row>
                     <Col>
-                    <Form.Label>Select Option</Form.Label>
+                        <button type="submit" class="btn btn-primary">הוסף</button>
+                    </Col>
+                    <Col>
+                    {/* <Form.Label>Select Option</Form.Label> */}
                     <Form.Select aria-label="Select option" style={{textAlign: 'right'}} >
+                        <option value="kind">סוג המוצר</option>
                         <option value="Camera">Camera</option>
                         <option value="Recording">Recording</option>
                         <option value="Tablets">Tablets</option>
