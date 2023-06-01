@@ -20,6 +20,7 @@ const ProductsLst = (props) => {
 
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState(null);
+
   let type = props.myProp;
 
   const [keyword, setKeyword] = useState('');
@@ -63,8 +64,13 @@ const ProductsLst = (props) => {
     if (rmm < 10) rmm = '0' + rmm;
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
+    const formattedReturnDate2 = "'" + ryyyy + '-' + rmm + '-' + rdd + "'";
 
-    if (fdd - rdd < 7) {
+    const d2 = new Date(formattedReturnDate2);
+    const oneDay = 24 * 60 * 60 * 1000;
+    const diffInDays = Math.round(Math.abs(borrow - d2) / oneDay);
+
+    if (diffInDays <= 7) {
       try {
         await sendRequest(
           'http://localhost:5000/borrow/addborrow',
@@ -85,26 +91,25 @@ const ProductsLst = (props) => {
       } catch (err) {
         console.log(err);
       }
+      try {
+        await sendRequest(
+          `http://localhost:5000/${props.myProp}/updateStatus/${props.myProp}`,
+          'PUT',
+          JSON.stringify({
+            equipmentID: borrowingItemId,
+            studentId: auth.userId,
+            available: false,
+          }),
+          {
+            'Content-Type': 'application/json',
+          }
+        );
+        window.location.reload();
+      } catch (err) {}
       alert('השאלת הציוד בוצע בהצלחה');
     } else {
       alert('לא ניתן להשכיר יותר משבוע');
     }
-
-    try {
-      await sendRequest(
-        `http://localhost:5000/${props.myProp}/updateStatus/${props.myProp}`,
-        'PUT',
-        JSON.stringify({
-          equipmentID: borrowingItemId,
-          studentId: auth.userId,
-          available: false,
-        }),
-        {
-          'Content-Type': 'application/json',
-        }
-      );
-      window.location.reload();
-    } catch (err) {}
   };
 
   const filteredData = data.filter((item) =>
