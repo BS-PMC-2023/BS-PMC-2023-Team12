@@ -38,10 +38,10 @@ const UpdateLst = () => {
   return (
     <div>
       <h1>Update List</h1>
-      <AddProduct/>
+      <AddProduct style={{ marginBottom: '20px' }} />
       {data1.map((item, index) => (
         //<li key={item.id}>{item.name}</li>
-        <ListGroup as="ol" key={item._id}>
+        <ListGroup as="ol" key={item._id} style={{ marginTop: '5px' }}>
           <ListGroup.Item
             as="li"
             //className="d-flex justify-content-between align-items-start"
