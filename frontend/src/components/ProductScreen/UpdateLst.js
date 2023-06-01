@@ -80,12 +80,12 @@ const UpdateLst = () => {
 
       {data2.map((item) => (
         //<li key={item.id}>{item.name}</li>
-        <ListGroup as="ol" key={item._id}>
+        <ListGroup as="ol" key={item._id} style={{ marginTop: '5px' }}>
           <ListGroup.Item
             as="li"
             //className="d-flex justify-content-between align-items-start"
           >
-            <div className="ms-2 me-auto">
+            <div className="ms-2 me-auto" >
               <div className="fw-bold">{item.name}</div>
               {item.id}
               <br />
