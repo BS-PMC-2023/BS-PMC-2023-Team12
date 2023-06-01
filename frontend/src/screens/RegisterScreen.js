@@ -39,7 +39,6 @@ const RegisterScreen = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-
     try {
       const responseData = await sendRequest(
         'http://localhost:5000/api/users/register',
@@ -59,7 +58,8 @@ const RegisterScreen = () => {
         responseData.token,
         responseData.name,
         responseData.isAdmin,
-        responseData.email
+        responseData.email,
+        responseData.role
       );
       navigate('/');
     } catch (err) {}

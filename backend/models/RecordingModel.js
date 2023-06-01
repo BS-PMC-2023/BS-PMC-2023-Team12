@@ -1,14 +1,24 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const recordingSchema = new mongoose.Schema({
-    id:String,
-    name:String,
-    available:Boolean,
-    studentID:Number
+  id: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  available: {
+    type: Boolean,
+    default: true,
+  },
+  studentID: {
+    type: String,
+    required: true,
+  },
 });
 
-
-const RecordingModel = mongoose.model("recording", recordingSchema);
+const RecordingModel = mongoose.model('recording', recordingSchema);
 
 exports.RecordingModel = RecordingModel;
-

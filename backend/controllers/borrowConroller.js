@@ -1,5 +1,7 @@
 const HttpError = require('../httpError');
 const Borrow = require('../models/borrowModel');
+const { CameraModel } = require('../models/CameraModel');
+const { RecordingModel } = require('../models/RecordingModel');
 var nodemailer = require('nodemailer');
 const cron = require('node-cron');
 
@@ -38,7 +40,7 @@ function sendEmail() {
 
           const managerMailOptions = {
             from: 'wmsvcteam12@gmail.com',
-            to: 'admin@ac.sce.ac.il', // Replace with the manager's email address
+            to: 'wmsvcteam12@gmail.com', // Replace with the manager's email address
             subject: `תזכורת להחזרת ציוד - לקוח: ${borrow.name}, מק"ט: ${borrow.equipmentID}`,
             text: generateManagerEmailText(borrow),
           };
@@ -87,7 +89,8 @@ cron.schedule('0 10 * * *', () => {
 });
 
 const addBorrow = async (req, res) => {
-  const { userID, equipmentID, name, email, borrowDate, returnDate } = req.body;
+  const { userID, equipmentID, name, email, borrowDate, returnDate, type } =
+    req.body;
 
   const createdBorrow = new Borrow({
     userID,
@@ -96,6 +99,7 @@ const addBorrow = async (req, res) => {
     email,
     borrowDate,
     returnDate,
+    type,
   });
 
   try {
@@ -140,7 +144,64 @@ const updateAvalibale = async (req, res, next) => {
     return next(err);
   }
 };
+const updateReturnBorrow = async (req, res, next) => {
+  const { _id, returnDate } = req.body;
+
+  try {
+    const borrow = await Borrow.findById({ _id });
+    console.log(returnDate);
+    console.log(borrow);
+    borrow.returnDate = returnDate;
+    const updateborrow = await borrow.save();
+
+    res.json({
+      returnDate: updateborrow.returnDate,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+const updateStatus = async (req, res, next) => {
+  const { params } = req.params;
+  const { equipmentID, studentId, available } = req.body;
+  let id = equipmentID;
+
+  if (params === 'camera') {
+    try {
+      const camera = await CameraModel.findOne({ id });
+
+      camera.studentID = studentId;
+      camera.available = available;
+
+      const updateCamera = await camera.save();
+      res.json({
+        studentID: updateCamera.studentId,
+        available: updateCamera.available,
+      });
+    } catch (err) {
+      return next(err);
+    }
+  } else if (params === 'recording') {
+    try {
+      const recording = await RecordingModel.findOne({ id });
+
+      recording.studentID = studentId;
+      recording.available = available;
+
+      const updateRecording = await recording.save();
+      res.json({
+        studentID: updateRecording.studentId,
+        available: updateRecording.available,
+      });
+    } catch (err) {
+      return next(err);
+    }
+  }
+};
 
 exports.addBorrow = addBorrow;
 exports.getBorrow = getBorrow;
 exports.updateAvalibale = updateAvalibale;
+exports.updateReturnBorrow = updateReturnBorrow;
+exports.updateStatus = updateStatus;

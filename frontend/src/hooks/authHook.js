@@ -6,13 +6,16 @@ export const useAuth = () => {
   const [userName, setUserName] = useState(null);
   const [isAdmin, setAdmin] = useState(false);
   const [email, SetEmail] = useState(null);
+  const [role, SetRole] = useState(null);
 
-  const login = useCallback((uid, token, name, admin, email) => {
+  const login = useCallback((uid, token, name, admin, email, role) => {
     setToken(token);
     setUserId(uid);
     setUserName(name);
     setAdmin(admin);
     SetEmail(email);
+    SetRole(role);
+
     localStorage.setItem(
       'userData',
       JSON.stringify({
@@ -21,6 +24,7 @@ export const useAuth = () => {
         name: name,
         admin: admin,
         email: email,
+        role: role,
       })
     );
   }, []);
@@ -31,6 +35,7 @@ export const useAuth = () => {
     setUserName(null);
     SetEmail(null);
     setAdmin(false);
+    SetRole(null);
     localStorage.removeItem('userData');
   }, []);
 
@@ -42,9 +47,10 @@ export const useAuth = () => {
         storedData.token,
         storedData.name,
         storedData.admin,
-        storedData.email
+        storedData.email,
+        storedData.role
       );
     }
   }, [login]);
-  return { token, login, logout, userId, userName, isAdmin, email };
+  return { token, login, logout, userId, userName, isAdmin, email, role };
 };

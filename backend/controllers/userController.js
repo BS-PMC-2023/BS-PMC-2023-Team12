@@ -19,20 +19,19 @@ const getUsers = async (req, res, next) => {
 };
 
 //get current user profile data
-const getUserProfile = async (req, res, next) =>{
+const getUserProfile = async (req, res, next) => {
+  const user = await User.findById(req.user._id);
 
-  const user = await User.findById(req.user._id)
-
-  if(user){
+  if (user) {
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-    })
-  }else{
-    res.status(404)
-    throw new Error('User not found')
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
   }
 };
 
@@ -95,6 +94,7 @@ const register = async (req, res, next) => {
     email: createdUser.email,
     name: createdUser.name,
     isAdmin: createdUser.isAdmin,
+    role: createdUser.role,
     token: token,
   });
 };
@@ -150,6 +150,7 @@ const login = async (req, res, next) => {
     email: existingUser.email,
     name: existingUser.name,
     isAdmin: existingUser.isAdmin,
+    role: existingUser.role,
     token: token,
   });
 };
@@ -286,29 +287,24 @@ const deleteUser = async (req, res, next) => {
 
 //ipdate the admin rights to the user in the database
 const updateAdmin = async (req, res, next) => {
-
   const { id } = req.params;
-  
+
   try {
-    const user = await User.findOne({_id: id});
+    const user = await User.findOne({ _id: id });
     user.isAdmin = !user.isAdmin;
     const UpdateUser = await user.save();
-  
+
     res.json({
       isAdmin: UpdateUser.isAdmin,
-    });  
+    });
   } catch (err) {
     return next(err);
   }
-
 };
 
 //update current user profile data
 const updateUserProfile = async (req, res, next) => {
-  console.log("in the function");
   const { name, _id, password } = req.body;
-  console.log(name,_id,password);
-
   let hashpassword;
   try {
     hashpassword = await bcrypt.hash(password, 12);
@@ -319,13 +315,10 @@ const updateUserProfile = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ _id: _id });
-    console.log(user.name);
     user.name = name;
-    console.log(user.name);
     user.password = hashpassword;
-    
+
     const UpdateUser = await user.save();
-    
 
     res.json({
       name: UpdateUser.name,
@@ -350,7 +343,79 @@ const updateUserProfile = async (req, res, next) => {
     const error = new HttpError('עדכון נכשל, אנא נסה שוב.', 500);
     return next(error);
   }
+};
 
+const reportABug = async (req, res, next) => {
+  const { email,equipmentID,name } = req.body;
+  try {
+    
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'wmsvcteam12@gmail.com',
+        pass: 'kfgyejkhdbbvzmfm',
+      },
+    });
+
+    var mailOptions = {
+      from: 'email',
+      to: 'wmsvcteam12@gmail.com',
+      subject: 'Report on a bug',
+      text: `שלום, אני רוצה לדווח על תקלה במוצר שהשאלתי.\n  שם מלא:  ${name}\n  מק"ט: ${equipmentID} \n מייל: ${email}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    //console.log(link);
+    res.json({
+      email: email,
+    });
+  } catch (err) {
+    const error = new HttpError(' נסה שוב.', 500);
+    return next(error);
+  }
+};
+
+const sendComment = async (req, res, next) => {
+  const { text,name,email } = req.body;
+  console.log(text);
+  try {
+    
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'wmsvcteam12@gmail.com',
+        pass: 'kfgyejkhdbbvzmfm',
+      },
+    });
+
+    var mailOptions = {
+      from: 'email',
+      to: 'wmsvcteam12@gmail.com',
+      subject: 'הודעה ממשתמש',
+      text: `${text}\n  שם מלא:  ${name}\n מייל: ${email}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    //console.log(link);
+    res.json({
+      text: text,
+    });
+  } catch (err) {
+    const error = new HttpError(' נסה שוב.', 500);
+    return next(error);
+  }
 };
 
 exports.getUsers = getUsers;
@@ -362,3 +427,7 @@ exports.resetPassword = resetPassword;
 exports.changePassword = changePassword;
 exports.updateUserProfile = updateUserProfile;
 exports.updateAdmin = updateAdmin;
+exports.reportABug = reportABug;
+exports.sendComment = sendComment;
+
+

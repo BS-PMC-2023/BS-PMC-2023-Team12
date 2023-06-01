@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Form from 'react-bootstrap/Form';
 import axios from 'axios';
-import { Form, Button, FormGroup, FormLabel } from 'react-bootstrap';
+import { Button, FormGroup, FormLabel } from 'react-bootstrap';
 import FormContainer from '../FormContainer';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -15,12 +16,12 @@ const ProductsLst = (props) => {
   const { error, sendRequest } = useHttpClient();
 
   const [data, setData] = useState([]);
-  const [borrowingItemId, setBorrowingItemId] = useState(4476762);
-
+  const [borrowingItemId, setBorrowingItemId] = useState(null);
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState('');
 
   // eslint-disable-next-line
+  const [showForm, setShowForm] = useState(false);
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -36,7 +37,8 @@ const ProductsLst = (props) => {
     console.log('this is the id of user ' + borrowingItemId);
 
     if (id === borrowingItemId) {
-      setBorrowingItemId(4476762);
+      setBorrowingItemId(null);
+      setShowForm(false);
     } else {
       setBorrowingItemId(id);
     }
@@ -65,27 +67,51 @@ const ProductsLst = (props) => {
     if (rmm < 10) rmm = '0' + rmm;
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
-    returnDate = formattedReturnDate;
-    try {
-      await sendRequest(
-        'http://localhost:5000/borrow/addborrow',
-        'POST',
-        JSON.stringify({
-          userID: auth.userId,
-          equipmentID: borrowingItemId,
-          name: auth.userName,
-          email: auth.email,
-          borrowDate: formattedBorrow,
-          returnDate: formattedReturnDate,
-        }),
-        {
-          'Content-Type': 'application/json',
-        }
-      );
-    } catch (err) {
-      console.log(err);
+    const formattedReturnDate2 = "'" + ryyyy + '-' + rmm + '-' + rdd + "'";
+    const d2 = new Date(formattedReturnDate2);
+    const oneDay = 24 * 60 * 60 * 1000;
+    const diffInDays = Math.round(Math.abs(borrow - d2) / oneDay);
+
+    if (diffInDays <= 7) {
+      try {
+        await sendRequest(
+          'http://localhost:5000/borrow/addborrow',
+          'POST',
+          JSON.stringify({
+            userID: auth.userId,
+            equipmentID: borrowingItemId,
+            name: auth.userName,
+            email: auth.email,
+            borrowDate: formattedBorrow,
+            returnDate: formattedReturnDate,
+            type: type,
+          }),
+          {
+            'Content-Type': 'application/json',
+          }
+        );
+      } catch (err) {
+        console.log(err);
+      }
+      try {
+        await sendRequest(
+          `http://localhost:5000/${props.myProp}/updateStatus/${props.myProp}`,
+          'PUT',
+          JSON.stringify({
+            equipmentID: borrowingItemId,
+            studentId: auth.userId,
+            available: false,
+          }),
+          {
+            'Content-Type': 'application/json',
+          }
+        );
+        window.location.reload();
+      } catch (err) {}
+      alert('השאלת הציוד בוצע בהצלחה');
+    } else {
+      alert('לא ניתן להשכיר יותר משבוע');
     }
-    alert('השאלת הציוד בוצע בהצלחה');
   };
 
   const filteredData = data.filter((item) =>
@@ -134,7 +160,7 @@ const ProductsLst = (props) => {
                     <Badge bg="danger" pill style={{ fontSize: 15 }}>
                       תפוס
                     </Badge>
-                    <div>Student Id: {item.studentID}</div>
+                    <div>Student ID: {item.studentID}</div>
                   </div>
                 )}
               </div>
@@ -190,6 +216,12 @@ const ProductsLst = (props) => {
           </ListGroup>
         ))}
       </div>
+    );
+  } else {
+    return (
+      <h1 style={{ marginTop: '70px' }}>
+        עליך להתחבר למערכת על מנת להשאיל ציוד
+      </h1>
     );
   }
 };
