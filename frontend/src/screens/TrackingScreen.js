@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
 import Loader from '../components/Loader';
+import moment from 'moment';
 
 const TrackingScreen = () => {
   const { isLoading, sendRequest } = useHttpClient();
@@ -21,8 +22,22 @@ const TrackingScreen = () => {
   const sortMethods = {
     none: { method: (a, b) => null },
     CreatedAt: { method: (a, b) => (a.createdAt < b.createdAt ? -1 : 1) },
-    BorrowDate: { method: (a, b) => (a.borrowDate < b.borrowDate ? -1 : 1) },
-    ReturnDate: { method: (a, b) => (a.returnDate < b.returnDate ? -1 : 1) },
+    BorrowDate: {
+      method: (a, b) =>
+        moment(a.borrowDate, 'DD/MM/YY').isBefore(
+          moment(b.borrowDate, 'DD/MM/YY')
+        )
+          ? -1
+          : 1,
+    },
+    ReturnDate: {
+      method: (a, b) =>
+        moment(a.returnDate, 'DD/MM/YY').isBefore(
+          moment(b.returnDate, 'DD/MM/YY')
+        )
+          ? -1
+          : 1,
+    },
     EquipmentID: { method: (a, b) => (a.equipmentID < b.equipmentID ? -1 : 1) },
   };
 
@@ -45,6 +60,20 @@ const TrackingScreen = () => {
     } catch (err) {
       console.log(err);
     }
+    try {
+      await sendRequest(
+        `http://localhost:5000/${borrow.type}/updateStatus/${borrow.type}`,
+        'PUT',
+        JSON.stringify({
+          equipmentID: borrow.equipmentID,
+          studentId: '0',
+          available: true,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+    } catch (err) {}
   };
   return (
     <>
