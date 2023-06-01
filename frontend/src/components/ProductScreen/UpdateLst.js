@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
+import AddProduct from '../AddProduct';
 
 const UpdateLst = () => {
   const [data1, setData1] = useState([]);
@@ -37,6 +38,7 @@ const UpdateLst = () => {
   return (
     <div>
       <h1>Update List</h1>
+      <AddProduct/>
       {data1.map((item, index) => (
         //<li key={item.id}>{item.name}</li>
         <ListGroup as="ol" key={item._id}>
