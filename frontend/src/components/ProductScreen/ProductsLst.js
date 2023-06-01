@@ -20,8 +20,7 @@ const ProductsLst = (props) => {
 
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState(null);
-
-
+  let type = props.myProp;
 
   const [keyword, setKeyword] = useState('');
 
@@ -33,11 +32,7 @@ const ProductsLst = (props) => {
     fetchData();
   }, [props.myProp]);
 
-
-
   const handleBorrowButtonClick = (id) => {
-    console.log('------' + borrowingItemId);
-
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
     } else {
@@ -69,10 +64,8 @@ const ProductsLst = (props) => {
 
     const formattedReturnDate = rdd + '/' + rmm + '/' + ryyyy;
 
- 
-    if((fdd-rdd)<7)
-    {
-    try {
+    if (fdd - rdd < 7) {
+      try {
         await sendRequest(
           'http://localhost:5000/borrow/addborrow',
           'POST',
@@ -83,6 +76,7 @@ const ProductsLst = (props) => {
             email: auth.email,
             borrowDate: formattedBorrow,
             returnDate: formattedReturnDate,
+            type: type,
           }),
           {
             'Content-Type': 'application/json',
@@ -92,12 +86,25 @@ const ProductsLst = (props) => {
         console.log(err);
       }
       alert('השאלת הציוד בוצע בהצלחה');
-      }else{
-        alert('לא ניתן להשכיר יותר משבוע');
-    
-      }
+    } else {
+      alert('לא ניתן להשכיר יותר משבוע');
+    }
 
-  
+    try {
+      await sendRequest(
+        `http://localhost:5000/${props.myProp}/updateStatus/${props.myProp}`,
+        'PUT',
+        JSON.stringify({
+          equipmentID: borrowingItemId,
+          studentId: auth.userId,
+          available: false,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+      window.location.reload();
+    } catch (err) {}
   };
 
   const filteredData = data.filter((item) =>
@@ -146,7 +153,7 @@ const ProductsLst = (props) => {
                     <Badge bg="danger" pill style={{ fontSize: 15 }}>
                       תפוס
                     </Badge>
-                    <div>Student Id: {item.studentID}</div>
+                    <div>Student ID: {item.studentID}</div>
                   </div>
                 )}
               </div>
