@@ -20,8 +20,8 @@ const ProductsLst = (props) => {
   let [borrowDate, setBorrowDate] = useState(new Date());
   let [returnDate, setRetunrDate] = useState('');
 
-  // eslint-disable-next-line
-  const [showForm, setShowForm] = useState(false);
+  let type = props.myProp;
+
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -33,12 +33,11 @@ const ProductsLst = (props) => {
   }, [props.myProp]);
 
   const handleBorrowButtonClick = (id) => {
-    console.log('this is the id of product ' + id);
-    console.log('this is the id of user ' + borrowingItemId);
+    // console.log('this is the id of product ' + id);
+    // console.log('this is the id of user ' + borrowingItemId);
 
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
-      setShowForm(false);
     } else {
       setBorrowingItemId(id);
     }
@@ -226,4 +225,4 @@ const ProductsLst = (props) => {
   }
 };
 
-export default ProductsLst;
+export default ProductsLst;
