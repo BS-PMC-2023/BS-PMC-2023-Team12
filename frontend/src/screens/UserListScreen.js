@@ -65,6 +65,7 @@ const UserListScreen = () => {
             <tr>
               <th>ת"ז</th>
               <th>שם</th>
+              <th>תפקיד</th>
               <th>אימייל</th>
               <th>הרשאות מנהל</th>
               <th></th>
@@ -75,6 +76,7 @@ const UserListScreen = () => {
               <tr key={user._id}>
                 <td>{user._id}</td>
                 <td>{user.name}</td>
+                <td>{user.role}</td>
                 <td>
                   <a href={`mailto:${user.email}`}>{user.email}</a>
                 </td>

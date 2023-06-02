@@ -38,7 +38,7 @@ const UpdateLst = () => {
   return (
     <div>
       <h1>Update List</h1>
-      <AddProduct/>
+      <AddProduct />
       <div style={{ marginBottom: '80px' }} />
       <h2>מחיקת פריט מהמערכת</h2>
       {data1.map((item, index) => (
@@ -85,7 +85,7 @@ const UpdateLst = () => {
             as="li"
             //className="d-flex justify-content-between align-items-start"
           >
-            <div className="ms-2 me-auto" >
+            <div className="ms-2 me-auto">
               <div className="fw-bold">{item.name}</div>
               {item.id}
               <br />
