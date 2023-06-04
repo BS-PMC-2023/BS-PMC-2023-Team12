@@ -16,6 +16,8 @@ import UpdatesProducts from './screens/UpdatesProducts';
 import TrackingScreen from './screens/TrackingScreen';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
+import CamersTypeScreen from './screens/CamersTypeScreen';
+import RecordingTypeScreen from './screens/RecordingTypeScreen';
 
 const App = () => {
   const { token, login, logout, userId, userName, isAdmin, email, role } =
@@ -48,6 +50,12 @@ const App = () => {
               <Route path="/personalZone" element={<PersonalZone />} />
               <Route path="/Contact" element={<Contact />} />
               <Route path="/ProductsScreen" element={<ProductsScreen />} />
+              <Route path="/CamersTypeScreen" element={<CamersTypeScreen />} />
+              <Route
+                path="/RecordingTypeScreen"
+                element={<RecordingTypeScreen />}
+              />
+
               <Route
                 path="/CamerasScreen"
                 element={<ProductsLst name="Camera" myProp="camera" />}

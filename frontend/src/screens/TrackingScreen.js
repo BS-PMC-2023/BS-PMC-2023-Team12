@@ -7,6 +7,22 @@ import moment from 'moment';
 const TrackingScreen = () => {
   const { isLoading, sendRequest } = useHttpClient();
   const [loadedBorrows, setLoadedBorrows] = useState();
+  const [filterApplied, setFilterApplied] = useState(false);
+
+  const newDate = () => {
+    let date = new Date();
+    const fyyyy = date.getFullYear();
+    let fmm = date.getMonth() + 1;
+    let fdd = date.getDate();
+
+    if (fdd < 10) fdd = '0' + fdd;
+    if (fmm < 10) fmm = '0' + fmm;
+
+    const formatteDate = fdd + '/' + fmm + '/' + fyyyy;
+    date = formatteDate;
+    console.log(date);
+    return date;
+  };
 
   useEffect(() => {
     const fetchBorrows = async () => {
@@ -75,6 +91,17 @@ const TrackingScreen = () => {
       );
     } catch (err) {}
   };
+
+  const handleSortChange = (e) => {
+    const value = e.target.value;
+    console.log(value);
+    if (value === 'filtter') {
+      setFilterApplied(true);
+    } else {
+      setFilterApplied(false);
+    }
+  };
+
   return (
     <>
       <hr className="hr-line-right"></hr>
@@ -96,12 +123,13 @@ const TrackingScreen = () => {
                 fontSize: '1rem',
                 minwidth: '100px',
               }}
-              onChange={(e) => setSortState(e.target.value)}
+              onChange={handleSortChange}
             >
               <option value="CreatedAt">מיין לפי</option>
               <option value="BorrowDate">תאריך השאלה</option>
               <option value="ReturnDate">תאריך החזרה</option>
               <option value="EquipmentID">מספר מק"ט</option>
+              <option value="filtter">סינון לפי מאחרים</option>
             </select>
           </ListGroupItem>
         </ListGroup>
@@ -130,7 +158,13 @@ const TrackingScreen = () => {
           <tbody>
             {loadedBorrows
               ?.sort(sortMethods[sortState].method)
-              ?.filter((borrow) => !borrow.isAvailable)
+              // ?.filter(
+              //   (borrow) =>
+              //     (!filterApplied || (!filterApplied && !borrow.isAvailable)) &&
+              //     moment(newDate(), 'DD/MM/YY').isAfter(
+              //       moment(borrow.returnDate, 'DD/MM/YY')
+              //     )
+              // )
               ?.map((borrow) => (
                 <tr key={borrow._id}>
                   <td>{borrow.userID}</td>
