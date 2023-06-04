@@ -29,8 +29,6 @@ pipeline{
         
    stage('Deploy to Heroku') {
             steps {
-                sh 'cd backend && npm run build'
-
                 withCredentials([string(credentialsId: 'heroku-api-key', variable: '852a1987-c14a-46b1-9f70-d3628c2c03e6')]) {
                     sh 'npm install -g heroku'
                     sh 'heroku login -i'
