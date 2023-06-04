@@ -33,7 +33,6 @@ const TrackingScreen = () => {
     };
     fetchBorrows();
   }, [sendRequest]);
-
   const [sortState, setSortState] = useState('none');
   const sortMethods = {
     none: { method: (a, b) => null },
@@ -55,6 +54,10 @@ const TrackingScreen = () => {
           : 1,
     },
     EquipmentID: { method: (a, b) => (a.equipmentID < b.equipmentID ? -1 : 1) },
+  };
+
+  const handleFilterButtonClick = () => {
+    setFilterApplied(!filterApplied);
   };
 
   const updateAvalibale = async (borrow) => {
@@ -91,17 +94,6 @@ const TrackingScreen = () => {
       );
     } catch (err) {}
   };
-
-  const handleSortChange = (e) => {
-    const value = e.target.value;
-    console.log(value);
-    if (value === 'filtter') {
-      setFilterApplied(true);
-    } else {
-      setFilterApplied(false);
-    }
-  };
-
   return (
     <>
       <hr className="hr-line-right"></hr>
@@ -109,6 +101,14 @@ const TrackingScreen = () => {
       <hr className="hr-line-left"></hr>
       <Col>
         <ListGroup variant="flush">
+          {' '}
+          <Button
+            variant="secondary"
+            className="ml-2"
+            onClick={handleFilterButtonClick}
+          >
+            {filterApplied ? '  בטל סינון' : '  הפעל סינון מאחרים '}
+          </Button>
           <ListGroupItem
             style={{ display: 'flex', justifyContent: 'flex-end' }}
           >
@@ -123,18 +123,16 @@ const TrackingScreen = () => {
                 fontSize: '1rem',
                 minwidth: '100px',
               }}
-              onChange={handleSortChange}
+              onChange={(e) => setSortState(e.target.value)}
             >
               <option value="CreatedAt">מיין לפי</option>
               <option value="BorrowDate">תאריך השאלה</option>
               <option value="ReturnDate">תאריך החזרה</option>
               <option value="EquipmentID">מספר מק"ט</option>
-              <option value="filtter">סינון לפי מאחרים</option>
             </select>
           </ListGroupItem>
         </ListGroup>
       </Col>
-
       {isLoading ? (
         <Loader />
       ) : (
@@ -158,13 +156,15 @@ const TrackingScreen = () => {
           <tbody>
             {loadedBorrows
               ?.sort(sortMethods[sortState].method)
-              // ?.filter(
-              //   (borrow) =>
-              //     (!filterApplied || (!filterApplied && !borrow.isAvailable)) &&
-              //     moment(newDate(), 'DD/MM/YY').isAfter(
-              //       moment(borrow.returnDate, 'DD/MM/YY')
-              //     )
-              // )
+              ?.filter((borrow) => !borrow.isAvailable)
+              ?.filter(
+                (borrow) =>
+                  !filterApplied ||
+                  (filterApplied &&
+                    moment(newDate(), 'DD/MM/YY').isAfter(
+                      moment(borrow.returnDate, 'DD/MM/YY')
+                    ))
+              )
               ?.map((borrow) => (
                 <tr key={borrow._id}>
                   <td>{borrow.userID}</td>
@@ -191,5 +191,4 @@ const TrackingScreen = () => {
     </>
   );
 };
-
 export default TrackingScreen;

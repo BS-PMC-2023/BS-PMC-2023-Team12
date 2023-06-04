@@ -277,22 +277,9 @@ tbody {
   text-align: center;
 }
 
-.accessibility-icon {
-  /* Image styles */
-}
-
-.accessibility-button {
-  /* Button styles */
-}
 .accessibility-options {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 10px; /* Adjust the spacing between the button and the options */
-}
-
-.zoom-button,
-.scroll-button,
-.clear-zoom-button {
-  /* Button styles */
 }
