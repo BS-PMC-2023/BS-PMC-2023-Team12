@@ -2,10 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, Col, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useHttpClient } from '../hooks/httpHook';
 import Loader from '../components/Loader';
+import moment from 'moment';
 
 const TrackingScreen = () => {
   const { isLoading, sendRequest } = useHttpClient();
   const [loadedBorrows, setLoadedBorrows] = useState();
+  const [filterApplied, setFilterApplied] = useState(false);
+
+  const newDate = () => {
+    let date = new Date();
+    const fyyyy = date.getFullYear();
+    let fmm = date.getMonth() + 1;
+    let fdd = date.getDate();
+
+    if (fdd < 10) fdd = '0' + fdd;
+    if (fmm < 10) fmm = '0' + fmm;
+
+    const formatteDate = fdd + '/' + fmm + '/' + fyyyy;
+    date = formatteDate;
+    console.log(date);
+    return date;
+  };
 
   useEffect(() => {
     const fetchBorrows = async () => {
@@ -16,14 +33,31 @@ const TrackingScreen = () => {
     };
     fetchBorrows();
   }, [sendRequest]);
-
   const [sortState, setSortState] = useState('none');
   const sortMethods = {
     none: { method: (a, b) => null },
     CreatedAt: { method: (a, b) => (a.createdAt < b.createdAt ? -1 : 1) },
-    BorrowDate: { method: (a, b) => (a.borrowDate < b.borrowDate ? -1 : 1) },
-    ReturnDate: { method: (a, b) => (a.returnDate < b.returnDate ? -1 : 1) },
+    BorrowDate: {
+      method: (a, b) =>
+        moment(a.borrowDate, 'DD/MM/YY').isBefore(
+          moment(b.borrowDate, 'DD/MM/YY')
+        )
+          ? -1
+          : 1,
+    },
+    ReturnDate: {
+      method: (a, b) =>
+        moment(a.returnDate, 'DD/MM/YY').isBefore(
+          moment(b.returnDate, 'DD/MM/YY')
+        )
+          ? -1
+          : 1,
+    },
     EquipmentID: { method: (a, b) => (a.equipmentID < b.equipmentID ? -1 : 1) },
+  };
+
+  const handleFilterButtonClick = () => {
+    setFilterApplied(!filterApplied);
   };
 
   const updateAvalibale = async (borrow) => {
@@ -45,6 +79,20 @@ const TrackingScreen = () => {
     } catch (err) {
       console.log(err);
     }
+    try {
+      await sendRequest(
+        `http://localhost:5000/${borrow.type}/updateStatus/${borrow.type}`,
+        'PUT',
+        JSON.stringify({
+          equipmentID: borrow.equipmentID,
+          studentId: '0',
+          available: true,
+        }),
+        {
+          'Content-Type': 'application/json',
+        }
+      );
+    } catch (err) {}
   };
   return (
     <>
@@ -53,6 +101,14 @@ const TrackingScreen = () => {
       <hr className="hr-line-left"></hr>
       <Col>
         <ListGroup variant="flush">
+          {' '}
+          <Button
+            variant="secondary"
+            className="ml-2"
+            onClick={handleFilterButtonClick}
+          >
+            {filterApplied ? '  בטל סינון' : '  הפעל סינון מאחרים '}
+          </Button>
           <ListGroupItem
             style={{ display: 'flex', justifyContent: 'flex-end' }}
           >
@@ -77,7 +133,6 @@ const TrackingScreen = () => {
           </ListGroupItem>
         </ListGroup>
       </Col>
-
       {isLoading ? (
         <Loader />
       ) : (
@@ -102,6 +157,14 @@ const TrackingScreen = () => {
             {loadedBorrows
               ?.sort(sortMethods[sortState].method)
               ?.filter((borrow) => !borrow.isAvailable)
+              ?.filter(
+                (borrow) =>
+                  !filterApplied ||
+                  (filterApplied &&
+                    moment(newDate(), 'DD/MM/YY').isAfter(
+                      moment(borrow.returnDate, 'DD/MM/YY')
+                    ))
+              )
               ?.map((borrow) => (
                 <tr key={borrow._id}>
                   <td>{borrow.userID}</td>
@@ -128,5 +191,4 @@ const TrackingScreen = () => {
     </>
   );
 };
-
 export default TrackingScreen;

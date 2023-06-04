@@ -5,65 +5,23 @@ import { useLocation } from 'react-router-dom';
 const PRODUCTS = [
   {
     id: 1,
-    img: '/camera.jpg',
-    header: 'Camera',
-    p: 'ציוד צילום',
+    img: '/Rodemicromic.jpg',
+    header: 'Rode Micro Mic',
+    p: ' ',
     a: 'צפה בזמינות',
-    href: './CamersTypeScreen',
+    href: './RecordingScreen?Rodemicromic',
   },
-  {
-    id: 2,
-    img: '/microphone.jpg',
-    header: 'Recording',
-    p: 'ציוד הקלטה',
-    a: 'צפה בזמינות',
-    href: './RecordingTypeScreen',
-  },
-  {
-    id: 3,
-    img: '/ipad.jpg',
-    header: 'Tablets',
-    p: 'טאבלטים',
-    a: 'צפה בזמינות',
-  },
-  {
-    id: 4,
-    img: '/tripod.jpg',
-    header: 'Tripod',
-    p: 'חצובות',
-    a: 'צפה בזמינות',
-  },
-  {
-    id: 5,
-    img: '/projector.jpg',
-    header: 'Projectors',
-    p: 'מקרנים',
-    a: 'צפה בזמינות',
-  },
-  {
-    id: 6,
-    img: '/cables.jpg',
-    header: 'Cables',
-    p: 'כבלים',
-    a: 'צפה בזמינות',
-  },
-  {
-    id: 7,
-    img: '/lights.jpg',
-    header: 'Lights',
-    p: 'תאורה',
-    a: 'צפה בזמינות',
-  },
-  {
-    id: 8,
-    img: '/convertors.jpg',
-    header: 'Convertos',
-    p: 'ממירים',
-    a: 'צפה בזמינות',
-  },
+  //   {
+  //     id: 2,
+  //     img: 'panasonic_dc_.jpg',
+  //     header: 'Panasonic DCS5',
+  //     p: ' ',
+  //     a: 'צפה בזמינות',
+  //     href: './CamerasScreen?PanasonicDCS5',
+  //   },
 ];
 
-const ProductsScreen = () => {
+const RecordingTypeScreen = () => {
   const { search } = useLocation();
 
   const keyword = search ? search.split('?')[1] : '';
@@ -83,7 +41,7 @@ const ProductsScreen = () => {
   return (
     <>
       <hr className="hr-line-right"></hr>
-      <h1>ציוד</h1>
+      <h1>ציוד הקלטה</h1>
       <hr className="hr-line-left"></hr>
       <div>
         <h1> </h1>
@@ -106,4 +64,4 @@ const ProductsScreen = () => {
   );
 };
 
-export default ProductsScreen;
+export default RecordingTypeScreen;

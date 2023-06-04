@@ -37,7 +37,7 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <SearchBox />
             <Nav className="ms-auto">
-              <LinkContainer to="/contact">
+              <LinkContainer to="/Contact">
                 <Nav.Link>
                   צור קשר <i className="fas fa-phone"></i>
                 </Nav.Link>

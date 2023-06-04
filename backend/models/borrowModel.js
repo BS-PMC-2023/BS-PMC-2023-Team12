@@ -13,6 +13,11 @@ const borrowSchema = mongoose.Schema(
       required: true,
     },
 
+    type: {
+      type: String,
+      required: true,
+    },
+
     equipmentID: {
       type: String,
       required: true,

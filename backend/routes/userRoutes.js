@@ -13,5 +13,7 @@ router.get('/reset-password/:id/:token', usersController.resetPassword);
 router.post('/reset-password/:id/:token', usersController.changePassword);
 router.put('/personalZone', usersController.updateUserProfile);
 router.put('/updateAdmin/:id', usersController.updateAdmin);
+router.post('/reportABug', usersController.reportABug);
+router.post('/sendComment', usersController.sendComment);
 
 module.exports = router;

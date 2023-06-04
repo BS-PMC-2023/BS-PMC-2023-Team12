@@ -345,6 +345,78 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
+const reportABug = async (req, res, next) => {
+  const { email,equipmentID,name } = req.body;
+  try {
+    
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'wmsvcteam12@gmail.com',
+        pass: 'kfgyejkhdbbvzmfm',
+      },
+    });
+
+    var mailOptions = {
+      from: 'email',
+      to: 'wmsvcteam12@gmail.com',
+      subject: 'Report on a bug',
+      text: `שלום, אני רוצה לדווח על תקלה במוצר שהשאלתי.\n  שם מלא:  ${name}\n  מק"ט: ${equipmentID} \n מייל: ${email}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    //console.log(link);
+    res.json({
+      email: email,
+    });
+  } catch (err) {
+    const error = new HttpError(' נסה שוב.', 500);
+    return next(error);
+  }
+};
+
+const sendComment = async (req, res, next) => {
+  const { subject,message,name,email } = req.body;
+  try {
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'wmsvcteam12@gmail.com',
+        pass: 'kfgyejkhdbbvzmfm',
+      },
+    });
+
+    var mailOptions = {
+      from: 'email',
+      to: 'wmsvcteam12@gmail.com',
+      subject: `${subject}`,
+      text: `${message}\n  שם מלא:  ${name}\n מייל: ${email}`,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+    //console.log(link);
+    res.json({
+      subject:subject,
+      message:message,
+    });
+  } catch (err) {
+    const error = new HttpError(' נסה שוב.', 500);
+    return next(error);
+  }
+};
+
 exports.getUsers = getUsers;
 exports.deleteUser = deleteUser;
 exports.register = register;
@@ -354,3 +426,7 @@ exports.resetPassword = resetPassword;
 exports.changePassword = changePassword;
 exports.updateUserProfile = updateUserProfile;
 exports.updateAdmin = updateAdmin;
+exports.reportABug = reportABug;
+exports.sendComment = sendComment;
+
+
