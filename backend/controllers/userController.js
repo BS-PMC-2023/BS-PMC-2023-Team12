@@ -382,10 +382,8 @@ const reportABug = async (req, res, next) => {
 };
 
 const sendComment = async (req, res, next) => {
-  const { text,name,email } = req.body;
-  console.log(text);
+  const { subject,message,name,email } = req.body;
   try {
-    
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -397,8 +395,8 @@ const sendComment = async (req, res, next) => {
     var mailOptions = {
       from: 'email',
       to: 'wmsvcteam12@gmail.com',
-      subject: 'הודעה ממשתמש',
-      text: `${text}\n  שם מלא:  ${name}\n מייל: ${email}`,
+      subject: `${subject}`,
+      text: `${message}\n  שם מלא:  ${name}\n מייל: ${email}`,
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -410,7 +408,8 @@ const sendComment = async (req, res, next) => {
     });
     //console.log(link);
     res.json({
-      text: text,
+      subject:subject,
+      message:message,
     });
   } catch (err) {
     const error = new HttpError(' נסה שוב.', 500);

@@ -3,35 +3,46 @@ import { AuthContext } from '../context/AuthContext';
 import { useHttpClient } from '../hooks/httpHook';
 
 const Contact = () => {
-    const { isLoading, sendRequest } = useHttpClient();
+    const { sendRequest } = useHttpClient();
     const auth = useContext(AuthContext);
-    const [text, setText] = useState('');
+    const [subject, setSubject] = useState(''); // Separate state for subject textarea
+    const [message, setMessage] = useState(''); // Separate state for message textarea
     const [capturedText, setCapturedText] = useState('');
-    let Text;
 
+
+    const now = new Date();
+    const currentHour = now.getHours();
+    let greeting;
+
+    if (currentHour > 5 && currentHour <= 12) {
+        greeting = 'בוקר טוב';
+    } else if (currentHour > 12 && currentHour <= 16) {
+        greeting = 'צהריים טובים';
+    } else if (currentHour > 16 && currentHour <= 20) {
+        greeting = 'ערב טוב';
+    } else {
+        greeting = 'לילה טוב';
+    }
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            setText(text + '\n');
+            setMessage(message + '\n');
         }
     };
 
-    // const handleButtonClick = () => {
-    //     setCapturedText(text);
-    //     setText('');
-    //     Text = text;
-    //     console.log(text);
-    // };
-
     const sendComment = async () => {
-        setCapturedText(text);
-        setText('');
-        
+        console.log('check');
+        setCapturedText(message); // Set the captured message
+        setCapturedText(subject); // Set the captured subject
+        setMessage(''); // Clear the message input
+
         try {
+            // Send the comment request
             await sendRequest(
                 'http://localhost:5000/api/users/sendComment',
                 'POST',
                 JSON.stringify({
-                    text: text,
+                    subject: subject,
+                    message: message,
                     name: auth.userName,
                     email: auth.email
                 }),
@@ -42,6 +53,7 @@ const Contact = () => {
         } catch (err) {
             throw err;
         }
+        console.log('check2');
         alert('ההודעה הועברה למנהל המחסן');
     };
 
@@ -49,20 +61,17 @@ const Contact = () => {
         <div>
             <>
                 <hr className="hr-line-right"></hr>
-                <h1>צרו קשר</h1>
-                <hr className="hr-line-left"></hr>
+                {auth.isLoggedIn ? (
+
+                    <h1 className="ml">
+                        {greeting} {auth.userName.split(' ')[0]}
+                    </h1>
+                ) : (
+                    <h1 className="ml">ברוך הבא</h1>
+                )}                <hr className="hr-line-left"></hr>
             </>
-            <div>
-                <p>
-                    For any inquiries or support, please reach out to us via email:
-                </p>
-                <ul>
-                    <li>
-                        Email:
-                        <a> warehousesuppo@gmail.com</a>
-                    </li>
-                </ul>
-            </div>
+            <h3 style={{ textAlign: 'center' }}>
+                שלום רב, הנך מוזמן להשאיר פניה ונעשה את מירב המאמצים ע"מ לחזור אליך בהקדם</h3>
             <div
                 className="text-box-container"
                 style={{
@@ -74,6 +83,23 @@ const Contact = () => {
             >
                 <textarea
                     className="text-box"
+                    placeholder="נושא"
+                    style={{
+                        width: '400px',
+                        height: '60px',
+                        fontSize: '24px',
+                        padding: '10px',
+                        border: '2px solid #ccc',
+                        borderRadius: '4px',
+                        textAlign: 'right',
+                    }}
+                    value={subject} // Use subject state instead of text state
+                    onChange={(event) => setSubject(event.target.value)} // Use setSubject instead of setText
+                />
+                <h5></h5>
+                <textarea
+                    className="text-box"
+                    placeholder="גוף ההודעה"
                     style={{
                         width: '400px',
                         height: '100px',
@@ -81,10 +107,10 @@ const Contact = () => {
                         padding: '10px',
                         border: '2px solid #ccc',
                         borderRadius: '4px',
+                        textAlign: 'right',
                     }}
-                    value={text}
-                    onChange={(event) => setText(event.target.value)}
-                    onKeyPress={handleKeyPress}
+                    value={message} // Use message state instead of text state
+                    onChange={(event) => setMessage(event.target.value)} // Use setMessage instead of setText
                 />
                 <button
                     className="submit-button"
@@ -106,7 +132,5 @@ const Contact = () => {
         </div>
     );
 };
-
-
 
 export default Contact;
