@@ -11,7 +11,9 @@ import Message from '../Message';
 import { useHttpClient } from '../../hooks/httpHook';
 import { AuthContext } from '../../context/AuthContext';
 
+
 const ProductsLst = (props) => {
+
   const auth = useContext(AuthContext);
   const { error, sendRequest } = useHttpClient();
 
@@ -107,7 +109,9 @@ const ProductsLst = (props) => {
         );
         window.location.reload();
       } catch (err) {}
-      alert('השאלת הציוד בוצע בהצלחה');
+      
+      
+      alert('שלום ' + auth.userName + ' המוצר: ' + borrowingItemId + ' הושאל בהצלחה. ');
     } else {
       alert('לא ניתן להשכיר יותר משבוע');
     }
