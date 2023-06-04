@@ -284,12 +284,6 @@ tbody {
   margin-top: 10px; /* Adjust the spacing between the button and the options */
 }
 
-.zoom-button,
-.scroll-button,
-.clear-zoom-button {
-  /* Button styles */
-}
-
 .letter-image {
 	position: absolute;
 	top: 50%;
