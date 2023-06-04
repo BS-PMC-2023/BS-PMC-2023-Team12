@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from 'axios';
+import AddProduct from '../AddProduct';
 
 const UpdateLst = () => {
   const [data1, setData1] = useState([]);
@@ -37,9 +38,12 @@ const UpdateLst = () => {
   return (
     <div>
       <h1>Update List</h1>
+      <AddProduct />
+      <div style={{ marginBottom: '80px' }} />
+      <h2>מחיקת פריט מהמערכת</h2>
       {data1.map((item, index) => (
         //<li key={item.id}>{item.name}</li>
-        <ListGroup as="ol" key={item._id}>
+        <ListGroup as="ol" key={item._id} style={{ marginTop: '5px' }}>
           <ListGroup.Item
             as="li"
             //className="d-flex justify-content-between align-items-start"
@@ -76,7 +80,7 @@ const UpdateLst = () => {
 
       {data2.map((item) => (
         //<li key={item.id}>{item.name}</li>
-        <ListGroup as="ol" key={item._id}>
+        <ListGroup as="ol" key={item._id} style={{ marginTop: '5px' }}>
           <ListGroup.Item
             as="li"
             //className="d-flex justify-content-between align-items-start"

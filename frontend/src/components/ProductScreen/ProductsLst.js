@@ -17,9 +17,8 @@ const ProductsLst = (props) => {
 
   const [data, setData] = useState([]);
   const [borrowingItemId, setBorrowingItemId] = useState(null);
-
   let [borrowDate, setBorrowDate] = useState(new Date());
-  let [returnDate, setRetunrDate] = useState(null);
+  let [returnDate, setRetunrDate] = useState('');
 
   let type = props.myProp;
 
@@ -34,6 +33,9 @@ const ProductsLst = (props) => {
   }, [props.myProp]);
 
   const handleBorrowButtonClick = (id) => {
+    // console.log('this is the id of product ' + id);
+    // console.log('this is the id of user ' + borrowingItemId);
+
     if (id === borrowingItemId) {
       setBorrowingItemId(null);
     } else {
