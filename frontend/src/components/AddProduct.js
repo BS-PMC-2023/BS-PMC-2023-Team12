@@ -32,7 +32,9 @@ const AddProduct = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/camera', data);
+          debugger;
+            console.log('productType:', productType, typeof productType);
+            const response = await axios.post('http://localhost:5000/${productType}', data);
             console.log(response.data);
             setIsSubmitted(true);
             // Handle the response or perform additional actions
@@ -89,14 +91,14 @@ const AddProduct = () => {
                 onChange={(event) => setProductType(event.target.value)}
               >
                 <option value="kind">סוג המוצר</option>
-                <option value="Camera">Camera</option>
-                <option value="Recording">Recording</option>
-                <option value="Tablets">Tablets</option>
-                <option value="Tripod">Tripod</option>
-                <option value="Projectors">Projectors</option>
-                <option value="Cabels">Cabels</option>
-                <option value="Lights">Lights</option>
-                <option value="Convertors">Convertors</option>
+                <option value="camera">Camera</option>
+                <option value="recording">Recording</option>
+                <option value="tablets">Tablets</option>
+                <option value="tripod">Tripod</option>
+                <option value="projectors">Projectors</option>
+                <option value="cabels">Cabels</option>
+                <option value="lights">Lights</option>
+                <option value="convertors">Convertors</option>
               </Form.Select>
             </Col>
           </Row>

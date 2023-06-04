@@ -14,6 +14,7 @@ import ProductsLst from './components/ProductScreen/ProductsLst';
 import UserListScreen from './screens/UserListScreen';
 import UpdatesProducts from './screens/UpdatesProducts';
 import TrackingScreen from './screens/TrackingScreen';
+import AboutUsScreen from './screens/AboutUsScreen'; // Import the AboutUsScreen component
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
 import CamersTypeScreen from './screens/CamersTypeScreen';
@@ -71,6 +72,7 @@ const App = () => {
                 path="/admin/UpdatesProducts"
                 element={<UpdatesProducts />}
               />
+              <Route path="/about" element={<AboutUsScreen />} /> 
             </Routes>
           </Container>
         </main>
