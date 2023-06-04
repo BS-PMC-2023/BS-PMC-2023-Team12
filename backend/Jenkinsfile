@@ -26,5 +26,19 @@ pipeline{
                 sh 'cd frontend && npm run test'
             }
         }
+        
+   stage('Deploy to Heroku') {
+            steps {
+                sh 'cd backend && npm run build'
+
+                withCredentials([string(credentialsId: 'heroku-api-key', variable: '852a1987-c14a-46b1-9f70-d3628c2c03e6')]) {
+                    sh 'npm install -g heroku'
+                    sh 'heroku login -i'
+                    sh 'heroku git:remote -a BS-PMC-2023-Team12'
+                    sh 'heroku config:set NODE_ENV=production'
+                    sh 'git push heroku master'
+                }
+            }
+        } 
     }
 }
