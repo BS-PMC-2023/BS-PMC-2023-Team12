@@ -112,22 +112,28 @@ const Contact = () => {
                     value={message} // Use message state instead of text state
                     onChange={(event) => setMessage(event.target.value)} // Use setMessage instead of setText
                 />
-                <button
-                    className="submit-button"
-                    style={{
-                        marginTop: '10px',
-                        padding: '10px 20px',
-                        fontSize: '18px',
-                        backgroundColor: '#4CAF50',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer',
-                    }}
-                    onClick={() => sendComment()}
-                >
-                    שלח פניה
-                </button>
+                <h1></h1>
+                <h1></h1>
+                <div style={{position:'relative'}}>
+                    <div class="letter-image" onClick={() => sendComment()}
+                    >
+                        <div class="animated-mail">
+                            <div class="back-fold"></div>
+                            <div class="letter">
+                                <div class="letter-border"></div>
+                                <div class="letter-title"></div>
+                                <div class="letter-context"></div>
+                                <div class="letter-stamp">
+                                    <div class="letter-stamp-inner"></div>
+                                </div>
+                            </div>
+                            <div class="top-fold"></div>
+                            <div class="body"></div>
+                            <div class="left-fold"></div>
+                        </div>
+                        <div class="shadow"></div>
+                    </div>
+                </div>
             </div>
         </div>
     );
