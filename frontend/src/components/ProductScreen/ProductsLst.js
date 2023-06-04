@@ -10,12 +10,17 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Message from '../Message';
 import { useHttpClient } from '../../hooks/httpHook';
 import { AuthContext } from '../../context/AuthContext';
+import { useLocation } from 'react-router-dom';
 
 
 const ProductsLst = (props) => {
 
   const auth = useContext(AuthContext);
   const { error, sendRequest } = useHttpClient();
+
+  const { search } = useLocation();
+
+  const TypesName = search ? search.split('?')[1] : '';
 
   const [data, setData] = useState([]);
   const [borrowingItemId, setBorrowingItemId] = useState(null);
@@ -138,86 +143,88 @@ const ProductsLst = (props) => {
           </Form.Group>
         </Form>
 
-        {filteredData.map((item) => (
-          <ListGroup as="ol" key={item._id}>
-            <ListGroup.Item as="li">
-              <div className="ms-2 me-auto">
-                <div className="fw-bold">{item.name}</div>
-                {item.id}
-                <br />
-                {item.available ? (
-                  <div className="d-flex justify-content-between align-items-start">
-                    <Badge bg="primary" pill style={{ fontSize: 15 }}>
-                      פנוי
-                    </Badge>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={() => handleBorrowButtonClick(item.id)}
-                    >
-                      השאל
-                    </button>
-                  </div>
-                ) : (
-                  <div className="d-flex justify-content-between align-items-start">
-                    <Badge bg="danger" pill style={{ fontSize: 15 }}>
-                      תפוס
-                    </Badge>
-                    <div>Student ID: {item.studentID}</div>
-                  </div>
-                )}
-              </div>
+        {filteredData
+          ?.filter((item) => item.name.replace(/\s/g, '') === TypesName)
+          .map((item) => (
+            <ListGroup as="ol" key={item._id}>
+              <ListGroup.Item as="li">
+                <div className="ms-2 me-auto">
+                  <div className="fw-bold">{item.name}</div>
+                  {item.id}
+                  <br />
+                  {item.available ? (
+                    <div className="d-flex justify-content-between align-items-start">
+                      <Badge bg="primary" pill style={{ fontSize: 15 }}>
+                        פנוי
+                      </Badge>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => handleBorrowButtonClick(item.id)}
+                      >
+                        השאל
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="d-flex justify-content-between align-items-start">
+                      <Badge bg="danger" pill style={{ fontSize: 15 }}>
+                        תפוס
+                      </Badge>
+                      <div>Student ID: {item.studentID}</div>
+                    </div>
+                  )}
+                </div>
 
-              {borrowingItemId === item.id && (
-                <React.Fragment>
-                  <FormContainer>
-                    <Form onSubmit={submitHandler}>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div className="d-grid gap-3">
-                          <Button
-                            type="submit"
-                            variant="primary"
-                            disabled={!returnDate || !borrowDate}
+                {borrowingItemId === item.id && (
+                  <React.Fragment>
+                    <FormContainer>
+                      <Form onSubmit={submitHandler}>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          <div className="d-grid gap-3">
+                            <Button
+                              type="submit"
+                              variant="primary"
+                              disabled={!returnDate || !borrowDate}
+                            >
+                              שריין
+                            </Button>
+                          </div>
+                          <FormGroup
+                            controlId="returnDate"
+                            style={{ marginLeft: '30px' }}
                           >
-                            שריין
-                          </Button>
+                            <FormLabel className="d-flex justify-content-center">
+                              <strong>:תאריך החזרה</strong>
+                            </FormLabel>
+                            <DatePicker
+                              selected={returnDate}
+                              onChange={(date) => setRetunrDate(date)}
+                              dateFormat="dd/MM/yyyy"
+                              minDate={new Date()}
+                            />
+                          </FormGroup>
+                          <FormGroup
+                            controlId="startDate"
+                            style={{ marginLeft: '30px' }}
+                          >
+                            <FormLabel className="d-flex justify-content-center">
+                              <strong>:תאריך השאלה</strong>
+                            </FormLabel>
+                            <DatePicker
+                              selected={borrowDate}
+                              onChange={(date) => setBorrowDate(date)}
+                              dateFormat="dd/MM/yyyy"
+                              minDate={new Date()}
+                            />
+                          </FormGroup>
                         </div>
-                        <FormGroup
-                          controlId="returnDate"
-                          style={{ marginLeft: '30px' }}
-                        >
-                          <FormLabel className="d-flex justify-content-center">
-                            <strong>:תאריך החזרה</strong>
-                          </FormLabel>
-                          <DatePicker
-                            selected={returnDate}
-                            onChange={(date) => setRetunrDate(date)}
-                            dateFormat="dd/MM/yyyy"
-                            minDate={new Date()}
-                          />
-                        </FormGroup>
-                        <FormGroup
-                          controlId="startDate"
-                          style={{ marginLeft: '30px' }}
-                        >
-                          <FormLabel className="d-flex justify-content-center">
-                            <strong>:תאריך השאלה</strong>
-                          </FormLabel>
-                          <DatePicker
-                            selected={borrowDate}
-                            onChange={(date) => setBorrowDate(date)}
-                            dateFormat="dd/MM/yyyy"
-                            minDate={new Date()}
-                          />
-                        </FormGroup>
-                      </div>
-                    </Form>
-                  </FormContainer>
-                </React.Fragment>
-              )}
-            </ListGroup.Item>
-          </ListGroup>
-        ))}
+                      </Form>
+                    </FormContainer>
+                  </React.Fragment>
+                )}
+              </ListGroup.Item>
+            </ListGroup>
+          ))}
       </div>
     );
   } else {
