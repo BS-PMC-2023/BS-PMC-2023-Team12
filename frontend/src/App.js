@@ -16,6 +16,7 @@ import UpdatesProducts from './screens/UpdatesProducts';
 import TrackingScreen from './screens/TrackingScreen';
 import { AuthContext } from './context/AuthContext';
 import { useAuth } from './hooks/authHook';
+import Accessibility from './components/Accessibility';
 
 const App = () => {
   const { token, login, logout, userId, userName, isAdmin, email, role } =
@@ -65,6 +66,7 @@ const App = () => {
             </Routes>
           </Container>
         </main>
+        <Accessibility />
         <Footer />
       </Router>
     </AuthContext.Provider>
