@@ -41,7 +41,6 @@
     "react-router-dom": "^6.11.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "nodemailer": "^6.9.1"
-    
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
