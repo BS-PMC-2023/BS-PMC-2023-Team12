@@ -33,7 +33,7 @@ pipeline{
                 withCredentials([usernamePassword(credentialsId: 'render-credentials', usernameVariable: 'edenba2@ac.sce.ac.il', passwordVariable: 'edenba2sce')]) {
                     sh 'render login --username $RENDER_USERNAME --password $RENDER_PASSWORD'  // Authenticate with Render
                     sh 'npm install'  // Install dependencies
-                    sh 'npm run client'  // Build the server
+                    sh 'npm run server'  // Build the server
                     sh 'render deploy --config render.yaml'  // Deploy the server using the Render CLI and configuration file
                 }
             }
