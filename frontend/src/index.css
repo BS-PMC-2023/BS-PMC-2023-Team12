@@ -208,6 +208,11 @@ a.dropdown-item:hover {
   border: none;
 }
 
+.table-custom .expired-row td {
+  background-color: #c70039 !important;
+  color: white !important;
+}
+
 thead {
   font-size: 18px;
   font-weight: bold;
