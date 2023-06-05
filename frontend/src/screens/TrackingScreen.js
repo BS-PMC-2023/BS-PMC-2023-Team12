@@ -166,7 +166,17 @@ const TrackingScreen = () => {
                     ))
               )
               ?.map((borrow) => (
-                <tr key={borrow._id}>
+                <tr
+                  key={borrow._id}
+                  className={
+                    !borrow.isAvailable &&
+                    moment(newDate(), 'DD/MM/YY').isAfter(
+                      moment(borrow.returnDate, 'DD/MM/YY')
+                    )
+                      ? 'expired-row'
+                      : ''
+                  }
+                >
                   <td>{borrow.userID}</td>
                   <td>
                     <a href={`mailto:${borrow.email}`}>{borrow.email}</a>
