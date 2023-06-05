@@ -29,8 +29,8 @@ pipeline{
         
         stage('Deploy to Render') {
             steps {
-                sh 'cd backend && render deploy'
-                sh 'cd frontend && render deploy'
+                sh 'render deploy --name team12 --path frontend'
+                sh 'render deploy --name team12-api --path backend'
             }
         }
     }
