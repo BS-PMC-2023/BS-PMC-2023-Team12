@@ -29,13 +29,15 @@ pipeline{
         
         stage('Deploy to Render') {
             steps {
-                sh 'npm install -g render-cli'  // Install Render CLI if not already installed
-                withCredentials([usernamePassword(credentialsId: 'render-credentials', usernameVariable: 'edenba2@ac.sce.ac.il', passwordVariable: 'edenba2sce')]) {
-                    sh 'render login --username $RENDER_USERNAME --password $RENDER_PASSWORD'  // Authenticate with Render
-                    sh 'npm install'  // Install dependencies
-                    sh 'npm run server'  // Build the server
-                    sh 'render deploy --config render.yaml'  // Deploy the server using the Render CLI and configuration file
-                }
+                // Install the Render CLI
+                sh 'curl -sL https://render.com/install.sh | bash'
+                
+                // Build the React application
+                sh 'npm install'  // Install dependencies
+                sh 'npm run build'  // Build the React app
+                
+                // Deploy the Node.js server and React application to Render
+                sh 'render deploy --build-command "npm install && npm run build" --start-command "npm start"'
             }
         }
 
