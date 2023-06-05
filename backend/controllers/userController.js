@@ -346,9 +346,8 @@ const updateUserProfile = async (req, res, next) => {
 };
 
 const reportABug = async (req, res, next) => {
-  const { email,equipmentID,name } = req.body;
+  const { email, equipmentID, name } = req.body;
   try {
-    
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -382,7 +381,7 @@ const reportABug = async (req, res, next) => {
 };
 
 const sendComment = async (req, res, next) => {
-  const { subject,message,name,email } = req.body;
+  const { subject, message, name, email } = req.body;
   try {
     var transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -408,8 +407,8 @@ const sendComment = async (req, res, next) => {
     });
     //console.log(link);
     res.json({
-      subject:subject,
-      message:message,
+      subject: subject,
+      message: message,
     });
   } catch (err) {
     const error = new HttpError(' נסה שוב.', 500);
@@ -428,5 +427,3 @@ exports.updateUserProfile = updateUserProfile;
 exports.updateAdmin = updateAdmin;
 exports.reportABug = reportABug;
 exports.sendComment = sendComment;
-
-
