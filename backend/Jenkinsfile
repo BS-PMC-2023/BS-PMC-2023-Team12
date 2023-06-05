@@ -21,24 +21,23 @@ pipeline{
             }
         }
 
-    stage('tests') {
+        stage('tests') {
             steps {
                 sh 'cd frontend && npm run test'
             }
         }
         
-   stage('Deploy to Heroku') {
+        stage('Deploy to Render') {
             steps {
-                sh 'cd backend && npm run build'
-
-                withCredentials([string(credentialsId: 'heroku-api-key', variable: '852a1987-c14a-46b1-9f70-d3628c2c03e6')]) {
-                    sh 'npm install -g heroku'
-                    sh 'heroku login -i'
-                    sh 'heroku git:remote -a BS-PMC-2023-Team12'
-                    sh 'heroku config:set NODE_ENV=production'
-                    sh 'git push heroku master'
+                sh 'npm install -g render-cli'  // Install Render CLI if not already installed
+                withCredentials([usernamePassword(credentialsId: 'render-credentials', usernameVariable: 'edenba2@ac.sce.ac.il', passwordVariable: 'edenba2sce')]) {
+                    sh 'render login --username $RENDER_USERNAME --password $RENDER_PASSWORD'  // Authenticate with Render
+                    sh 'npm install'  // Install dependencies
+                    sh 'npm run build'  // Build the server
+                    sh 'render deploy --config render.yaml'  // Deploy the server using the Render CLI and configuration file
                 }
             }
-        } 
+        }
+
     }
 }
