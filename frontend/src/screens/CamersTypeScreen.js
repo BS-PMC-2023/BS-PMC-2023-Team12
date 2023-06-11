@@ -26,7 +26,7 @@ const CamersTypeScreen = () => {
 
   const keyword = search ? search.split('?')[1] : '';
 
-  const newSearch = 'http://localhost:3000/';
+  const newSearch = '/';
 
   const filteredProducts = PRODUCTS.filter(
     (product) =>

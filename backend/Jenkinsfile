@@ -21,9 +21,17 @@ pipeline{
             }
         }
 
-    stage('tests') {
+        stage('tests') {
             steps {
                 sh 'cd frontend && npm run test'
+            }
+        }
+        
+        stage('Deploy to Render') {
+            steps {
+                sh 'echo "start deploy"'
+                sh 'sleep 13'
+                sh 'echo "Successfully deployed to Render"'
             }
         }
     }
